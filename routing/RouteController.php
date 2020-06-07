@@ -8,6 +8,8 @@
 namespace routing;
 
 
+
+
 class RouteController
 {
     /**
@@ -18,6 +20,7 @@ class RouteController
     public $controller;
     public $method;
     public $requests;
+
     public function __construct($req) // Парсинг строки запроса с выделением контроллеров - действий контроллера  входящих параметров не зависимо от метода их передачи
     {
         // Действие 1 выделение контроллера и его метода работа с ключом url
@@ -44,5 +47,6 @@ class RouteController
             $this->requests[]=$temp; // объединение в нумерованный массив
             unset($temp); // Очистка временного массиваа
         }
+
     }
 }
