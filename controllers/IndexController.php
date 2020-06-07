@@ -9,7 +9,9 @@ use models\IndexModel;
 
 class IndexController
 {
-
+    /**
+     * @param null $params
+     */
 
     public function index($params=null)
     {

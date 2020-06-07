@@ -1,12 +1,8 @@
 <?php
-session_start(); // Начало работы с Сессией
-if(!$_SESSION['ValidateFormAccess']){
-        $_SESSION['ValidateFormAccess']=uniqid(); // Присвоение Одноразового пароля валидации на право отправить запрос
-}
+
 // Подключаемые контроллеры
 use routing\RouteController;
-use controllers\InitController;
-use controllers\Magic;
+
 
 // Автозагрузчик классов
     spl_autoload_register(function($className) {
@@ -19,12 +15,15 @@ use controllers\Magic;
         }
     });
 
-// Имплементация
+    // Имплементация
     $route = new RouteController($_REQUEST); // Подготовка к инициализации приложения --- парсинг запроса
-
-// Исполнение приложения
+    session_start(); // Начало работы с Сессией
+    if(!$_SESSION['ValidateFormAccess']){ // Если у нас не получен одноразывый ключ для работы с формой, то присваеваем его
+        $_SESSION['ValidateFormAccess']=uniqid(); // Присвоение Одноразового пароля валидации на право отправить запрос
+    }
+    // Исполнение приложения
     $implement_controller = new $route->controller; // Вызов контроллера
-   // Проверка на принадлежностть класса вызываемого контроллера к классу унаследованного от Magic
+    // Проверка на принадлежностть класса вызываемого контроллера к классу унаследованного от Magic
     $check_magic=get_parent_class($implement_controller); // Запрос родителя
     if($check_magic=="controllers\Magic"){ // Если контроллер является наследником Магического класса
         $implement_controller->index($route->method,$route->requests); // Передаем ему параметром запрашиваемй метод и запрос на его метод Index
