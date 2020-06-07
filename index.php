@@ -1,4 +1,8 @@
 <?php
+session_start(); // Начало работы с Сессией
+if(!$_SESSION['ValidateFormAccess']){
+        $_SESSION['ValidateFormAccess']=uniqid(); // Присвоение Одноразового пароля валидации на право отправить запрос
+}
 // Подключаемые контроллеры
 use routing\RouteController;
 use controllers\InitController;
