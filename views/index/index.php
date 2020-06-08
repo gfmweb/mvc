@@ -2,7 +2,7 @@
 <html lang="ru-Ru">
 <head>
     <meta charset="UTF-8">
-    <title><?=$title?></title>
+    <title><?= $model->title ?></title>
 <?php
 /**
  * Вид контроллера IndexController Методы использования (index)
@@ -16,7 +16,9 @@ include('template/header_str.php');
 ?>
 </head>
 <body>
-<?= $content ?>
+    <section id="content" >
+        <?= $model->content ?>
+    </section>
 
 <?php
 include('template/footer_str.php');
@@ -39,6 +41,9 @@ include('template/footer_str.php');
             });
         }, false);
     })();
+
 </script>
+<?=$model->script?>
+
 </body>
 </html>
