@@ -1,4 +1,7 @@
 <?php
+ini_set('error_reporting', E_ALL);
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
 
 // Подключаемые контроллеры
 use routing\RouteController;
@@ -18,8 +21,8 @@ use routing\RouteController;
     // Имплементация
     $route = new RouteController($_REQUEST); // Подготовка к инициализации приложения --- парсинг запроса
     session_start(); // Начало работы с Сессией
-    if(!$_SESSION['ValidateFormAccess']){ // Если у нас не получен одноразывый ключ для работы с формой, то присваеваем его
-        $_SESSION['ValidateFormAccess']=uniqid(); // Присвоение Одноразового пароля валидации на право отправить запрос
+    if(!isset($_SESSION['ValidateFormAccess'])){ // Если у нас не получен одноразывый ключ для работы с формой, то присваеваем его
+        $_SESSION['ValidateFormAccess']=uniqid('', true); // Присвоение Одноразового пароля валидации на право отправить запрос
     }
     // Исполнение приложения
     $implement_controller = new $route->controller; // Вызов контроллера

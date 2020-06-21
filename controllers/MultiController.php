@@ -12,7 +12,7 @@ class MultiController extends Magic
 
     public function index($req_method=null,$req_params=null)
     {
-
+      echo 'Был запрошен метод:'.$req_method;
 
     }
 }

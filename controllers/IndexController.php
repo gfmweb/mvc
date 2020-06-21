@@ -15,10 +15,14 @@ class IndexController
 
     public function index($params=null)
     {
-        if(!$_SESSION['User']){
+        if(!isset($_SESSION['User'])){
             header('Location:/IndexController/login');
         }
-        echo 'Пользователь Авторизирован';
+        else
+        {
+           echo('Личный кабинет');
+        }
+
     }
     public function login($params=null)
     {

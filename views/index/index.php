@@ -16,9 +16,9 @@ include('template/header_str.php');
 ?>
 </head>
 <body>
-    <section id="content" >
+    <div class="container-fluid" id="content" >
         <?= $model->content ?>
-    </section>
+    </div>
 
 <?php
 include('template/footer_str.php');

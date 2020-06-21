@@ -1,5 +1,5 @@
 <?php
 define("DB_HOST","localhost"); // где живет БД
-define("DB_NAME","yii"); //Имя базы
+define("DB_NAME","mvc"); //Имя базы
 define("DB_USER","root"); //Пользователь
 define("DB_PASSWORD","root"); //Пароль
