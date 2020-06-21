@@ -42,9 +42,9 @@ class RouteController
         // Действие 2 извлечение массива ключей и их значений при входящем запросе
         $keys=array_keys($req);//Сбор ключей массива
 
-        for ($i=0, $iMax = count($keys); $i< $iMax; $i++){ // Создание нумерованного массива запросов
-            $temp['param']=$keys[$i];  // Запись имени параметра
-            $temp['val']=$req[$keys[$i]]; // Запись значения параметра
+        foreach ($keys as $iValue) { // Создание нумерованного массива запросов
+            $temp['param']= $iValue;  // Запись имени параметра
+            $temp['val']=$req[$iValue]; // Запись значения параметра
             $temp['val']=trim($temp['val']); // Удаление пробелов
             $temp['val']=htmlspecialchars($temp['val']); // Экранирование метатегов
 

@@ -119,7 +119,7 @@ class IndexModel
                    <label for="validationCustomUserEmail">E-mail</label>
                    <div class="input-group">
                       
-                       <input type="email" name="UserEmail" class="form-control" id="validationCustomUsername" placeholder="Ваша почта"
+                       <input type="email" name="UserEmail" class="form-control" id="validationCustomUserEmail" placeholder="Ваша почта"
                               aria-describedby="inputGroupPrepend" required>
                        <div class="valid-feedback">
                            Норм!
@@ -133,7 +133,7 @@ class IndexModel
                    <label for="validationCustomUserPassword">Пароль</label>
                    <div class="input-group">
                       
-                       <input type="password" name="UserPassword" class="form-control" id="validationCustomUsername"  placeholder="Придумайте пароль"
+                       <input type="password" name="UserPassword" class="form-control" id="validationCustomUserPassword"  placeholder="Придумайте пароль"
                               aria-describedby="inputGroupPrepend" required>
                        <div class="valid-feedback">
                            Норм!
