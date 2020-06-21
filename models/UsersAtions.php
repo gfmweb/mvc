@@ -9,7 +9,7 @@ use models\Mail;
 class UsersAtions
 {
 
-    public static function findUser($params=null,$action=null)
+    public static function findUser($params=null,$action=null) // поиск пользователя в БД и проверка его входа/ либо проверка уникальности почты
     {
         if(is_array($params)) // Если нам скормили нормальный массив данных
         {
@@ -38,6 +38,7 @@ class UsersAtions
                                {
 
                                    $_SESSION['User'] = $user['name']; // Записали в сессию как зовут пользователя
+                                   $_SESSION['User_info'] = $user;
                                    return true;
                                    break; // возвращаем ТРУ
                                }
@@ -65,9 +66,7 @@ class UsersAtions
 
         }
 
-
-
-    public static function RegisterUser($params = null)
+    public static function RegisterUser($params = null) // Регистрация пользователя
     {
         for($i=0,$iMax=count($params); $i < $iMax; $i++) // Собираем необходимые данные для регистрации Имя пользователя
         {
@@ -115,7 +114,7 @@ class UsersAtions
 
     }
 
-    public static function Remind($params=null)
+    public static function Remind($params=null) // Восстановление пароля
     {
         $db = Db::init(); // Инициализируем БД
         $res=$db->query("SELECT * FROM `users` WHERE `email` ='".$params[0]['val']."'"); // Спрашиваем у БД есть ли такой
@@ -134,5 +133,115 @@ class UsersAtions
             $_SESSION['alert']='К сожалению нам не удалось найти такой учетной записи. Возможно Вы допустили ошибку при указании почты / или указали не ту ';
         }
     }
+
+    public static function Update($params=null) // Изменение Учетных данных пользователя
+    {
+        foreach ($params as $el)
+        {
+            if($el['param']==='UserName')
+            {
+                $User=$el['val'];
+            }
+            elseif ($el['param']==='UserEmail')
+            {
+                $Email=$el['val'];
+            }
+            elseif ($el['param']==='UserPassword')
+            {
+                $Password=$el['val'];
+            }
+            elseif ($el['param']==='UserId')
+            {
+                $Target=$el['val'];
+            }
+        }
+        if(!isset($Password)){$Password='stay_old_password_1';}
+        if(isset($User,$Email,$Password,$Target)) // Если собраны все необходимые элементы для того чтобы Что-то могла быть изменено
+        {
+            $db=Db::init();
+            $req=$db->query("SELECT * FROM `users` WHERE `id` = '".$Target."'");
+            $curent_user=$req->fetch_assoc();
+            if($curent_user['id']) // Если есть такой пользователь то можно проверять что-там у него поменялось
+            {
+                if($User!==$curent_user['name'])
+                {
+                    $name_flag=true;
+                }
+                if($Email!==$curent_user['email'])
+                {
+                    $mail_flag=true;
+                }
+                if($Password!=='stay_old_password_1')
+                {
+                    $password_flag=true;
+                }
+
+                // Варианты развития событий
+                //1. Поменялось только ИМЯ
+                if((isset($name_flag))&&(!isset($mail_flag))&&(!isset($password_flag)))
+                {
+                    $db->query("UPDATE `users` SET `name` = '".$db->escape_string($User)."' WHERE `id` = '".$Target."'");
+                    $_SESSION['User_info']['name']=$User;
+                    return 'name_changed';
+                }
+                //2. Поменялась только ПОЧТА
+                if((!isset($name_flag))&&(isset($mail_flag))&&(!isset($password_flag)))
+                {
+                    $db->query("UPDATE `users` SET `email` = '".$db->escape_string($Email)."', `confirm`=FALSE WHERE `id` = '".$Target."'");
+                    $mail_send = new Mail($_SERVER['SERVER_NAME']); // Создаём экземпляр класса
+                    $mail_send->setFromName("Администрация сайта"); // Устанавливаем имя в обратном адресе
+                    $mail_send->send($Email, "Подтверждение нового почтового ящика", "<h3>Здравствуйте ".$User."!</h3><p>Вы получили это письмо для подтверждения изменения почтового ящика  на сайте <strong>".$_SERVER['SERVER_NAME']."</strong> </p><p>Для активации Вашего аккаунта пройдите по ссылке: <a href='https://".$_SERVER['SERVER_NAME']."/DverController/activate?login=".$curent_user['password']."&mail=".$Email."'>https://".$_SERVER['SERVER_NAME']."/DverController/activate?login=".$curent_user['password']."&mail=".$Email."</a></p>");
+                    return 'email_changed';
+                }
+                //3. Поменялся только ПАРОЛЬ
+                if((!isset($name_flag))&&(!isset($mail_flag))&&(isset($password_flag)))
+                {
+
+                    $new_pass=password_hash($Password,PASSWORD_DEFAULT);
+                    $db->query("UPDATE `users` SET `password` = '".$new_pass."' WHERE `id` = '".$Target."'");
+                    return 'password_changed';
+                }
+                //4. Поменялось ИМЯ и ПОЧТА
+                if((isset($name_flag,$mail_flag))&&(!isset($password_flag)))
+                    {
+                        $db->query("UPDATE `users` SET `name`= '".$User."', `email` = '".$db->escape_string($Email)."', `confirm`=FALSE WHERE `id` = '".$Target."'");
+                        $mail_send = new Mail($_SERVER['SERVER_NAME']); // Создаём экземпляр класса
+                        $mail_send->setFromName("Администрация сайта"); // Устанавливаем имя в обратном адресе
+                        $mail_send->send($Email, "Подтверждение нового почтового ящика", "<h3>Здравствуйте ".$User."!</h3><p>Вы получили это письмо для подтверждения изменения почтового ящика  на сайте <strong>".$_SERVER['SERVER_NAME']."</strong> </p><p>Для активации Вашего аккаунта пройдите по ссылке: <a href='https://".$_SERVER['SERVER_NAME']."/DverController/activate?login=".$curent_user['password']."&mail=".$Email."'>https://".$_SERVER['SERVER_NAME']."/DverController/activate?login=".$curent_user['password']."&mail=".$Email."</a></p>");
+                        return 'name_email_changed';
+                    }
+                //5. Поменялось ИМЯ и ПАРОЛЬ
+                if((isset($name_flag,$password_flag))&&(!isset($mail_flag)))
+                {
+                    $new_pass=password_hash($Password,PASSWORD_DEFAULT);
+                    $db->query("UPDATE `users` SET `name`=".$User." `password` = '".$new_pass."' WHERE `id` = '".$Target."'");
+                    $_SESSION['User_info']['name']=$User;
+                    return 'name_password_changed';
+                }
+                //6. Поменялось ПОЧТА и ПАРОЛЬ
+                if((!isset($name_flag))&&(isset($mail_flag,$password_flag)))
+                {
+                    $new_pass=password_hash($Password,PASSWORD_DEFAULT);
+                    $db->query("UPDATE `users` SET `email` = '".$db->escape_string($Email)."', `confirm`=FALSE,`password`= '".$new_pass."' WHERE `id` = '".$Target."'");
+                    $mail_send = new Mail($_SERVER['SERVER_NAME']); // Создаём экземпляр класса
+                    $mail_send->setFromName("Администрация сайта"); // Устанавливаем имя в обратном адресе
+                    $mail_send->send($Email, "Подтверждение нового почтового ящика", "<h3>Здравствуйте ".$User."!</h3><p>Вы получили это письмо для подтверждения изменения почтового ящика  на сайте <strong>".$_SERVER['SERVER_NAME']."</strong> </p><p>Для активации Вашего аккаунта пройдите по ссылке: <a href='https://".$_SERVER['SERVER_NAME']."/DverController/activate?login=".$curent_user['password']."&mail=".$Email."'>https://".$_SERVER['SERVER_NAME']."/DverController/activate?login=".$curent_user['password']."&mail=".$Email."</a></p>");
+                    return 'email_password_changed';
+                }
+                //7. Поменялось ИМЯ ПОЧТА ПАРОЛЬ
+                if(isset($name_flag,$mail_flag,$password_flag))
+                {
+                    $new_pass=password_hash($Password,PASSWORD_DEFAULT);
+                    $db->query("UPDATE `users` SET `name` = '".$User."',`email` = '".$db->escape_string($Email)."', `confirm`=FALSE,`password`= '".$new_pass."' WHERE `id` = '".$Target."'");
+                    $mail_send = new Mail($_SERVER['SERVER_NAME']); // Создаём экземпляр класса
+                    $mail_send->setFromName("Администрация сайта"); // Устанавливаем имя в обратном адресе
+                    $mail_send->send($Email, "Подтверждение нового почтового ящика", "<h3>Здравствуйте ".$User."!</h3><p>Вы получили это письмо для подтверждения изменения почтового ящика  на сайте <strong>".$_SERVER['SERVER_NAME']."</strong> </p><p>Для активации Вашего аккаунта пройдите по ссылке: <a href='https://".$_SERVER['SERVER_NAME']."/DverController/activate?login=".$curent_user['password']."&mail=".$Email."'>https://".$_SERVER['SERVER_NAME']."/DverController/activate?login=".$curent_user['password']."&mail=".$Email."</a></p>");
+                    return 'name_email_password_changed';
+                }
+            }
+        }
+
+    }
+
 
 }

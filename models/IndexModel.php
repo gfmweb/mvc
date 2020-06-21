@@ -19,7 +19,7 @@ class IndexModel
     public $script;
 
 
-    public function login($obj)
+    public function login()
     {
         $alert=null;
         if(isset($_SESSION['alert']))
@@ -45,8 +45,8 @@ class IndexModel
             unset($_SESSION['success']);
         }
 
-        $obj->title="Вход";
-        $obj->content='<div class="row justify-content-center mt-4"><div class="container"> '.$alert.'</div>
+        $this->title="Вход";
+        $this->content='<div class="row justify-content-center mt-4"><div class="container"> '.$alert.'</div>
    <div class="col-lg-6">
      <div class="card card-body">
        <form action="/DverController/login" method="post" class="needs-validation" novalidate>
@@ -92,13 +92,13 @@ class IndexModel
      </div>
    </div>
 </div>';
-        $obj->script="";
-        return $obj;
+        $this->script="";
+        return $this;
     }
-    public function register($obj)
+    public function register()
     {
-        $obj->title="Регистрация";
-        $obj->content='<div class="row justify-content-center mt-4">
+        $this->title="Регистрация";
+        $this->content='<div class="row justify-content-center mt-4">
    <div class="col-lg-6">
      <div class="card card-body">
        <form action="/DverController/register"  method="post" class="needs-validation" novalidate>
@@ -193,13 +193,13 @@ class IndexModel
 
 
 ';
-        $obj->script='';
-        return $obj;
+        $this->script='';
+        return $this;
     }
-    public function remind($obj)
+    public function remind()
     {
-        $obj->title="Восстановление доступа";
-        $obj->content='<div class="row justify-content-center mt-4">
+        $this->title="Восстановление доступа";
+        $this->content='<div class="row justify-content-center mt-4">
    <div class="col-lg-6">
      <div class="card card-body">
        <form action="/DverController/remind" method="post" class="needs-validation" novalidate>
@@ -229,6 +229,6 @@ class IndexModel
    </div>
 </div>
         ';
-        return $obj;
+        return $this;
     }
 }

@@ -76,5 +76,21 @@ final class DverController
             header("Location: http://".$_SERVER['SERVER_NAME']);
         }
     }
-
+    public function update($params=null)
+    {
+        if(ValidateAccess::ValidAccess($params)) // Если форма пришла с нашего сайта то Работаем
+        {
+           $result=UsersAtions::Update($params);
+           $action = stripos($result, "email");
+            if ($action === false) {
+                $_SESSION['success']='Изменения успешно внесены';
+            }
+            else
+            {
+                unset($_SESSION['User']);
+                $_SESSION['success']='Вы изменили свой почтовый ящик и Мы вновь отправили Вам письмо чтобы его подтвердить. Пожалуйста проверьте почту, Подтвердите Свой ящик, и снова сможете пользоваться сайтом';
+            }
+         header('Location: /');
+        }
+    }
 }

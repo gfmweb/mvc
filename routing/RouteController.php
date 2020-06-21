@@ -36,7 +36,7 @@ class RouteController
             unset($req['url']); // Очистка массива от ключа контроллер / метод
         }
         else{ // Действие по умолчанию без указания контроллера и метода
-            $this->controller='controllers\\indexController';
+            $this->controller='controllers\\IndexController';
             $this->method='index';
         }
         // Действие 2 извлечение массива ключей и их значений при входящем запросе
