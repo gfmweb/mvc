@@ -208,14 +208,17 @@ class UsersAtions
                 }
                 if(isset($photo_flag))
                 {
-
+                    if(isset($curent_user['photo']))
+                    {
+                        unset($curent_user['photo']);
+                    }
                     if(($Photo['error'] === 0) && $Photo['type'] == "image/png") {
                         $name=uniqid().".png";
                         move_uploaded_file($Photo['tmp_name'], "content/avatars/".$name); // Переносим полученный файл
                         $new_photo="content/avatars/".$name;
                         $image = new SimpleImage();
                         $image->load($new_photo);
-                        $image->resizeToWidth(250);
+                        $image->resize(200, 200);
                         $image->save('content/avatars/ava_'.$name);
                         $new_photo="/content/avatars/ava_".$name;
                         unlink('content/avatars/'.$name);
@@ -226,7 +229,7 @@ class UsersAtions
                         $new_photo="content/avatars/".$name;
                         $image = new SimpleImage();
                         $image->load($new_photo);
-                        $image->resizeToWidth(250);
+                        $image->resize(200, 200);
                         $image->save('content/avatars/ava_'.$name);
                         $new_photo="/content/avatars/ava_".$name;
                         unlink('content/avatars/'.$name);
@@ -237,7 +240,7 @@ class UsersAtions
                         $new_photo="content/avatars/".$name;
                         $image = new SimpleImage();
                         $image->load($new_photo);
-                        $image->resizeToWidth(250);
+                        $image->resize(200, 200);
                         $image->save('content/avatars/ava_'.$name);
                         $new_photo="/content/avatars/ava_".$name;
                         unlink('content/avatars/'.$name);
