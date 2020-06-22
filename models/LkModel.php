@@ -15,6 +15,13 @@ class LkModel
 
     public function GenerateLk() // Индексная страница личного кабинета
     {
+        if(!isset($_SESSION['User_info']['photo'][0]))
+        {
+            $logo=" <i class=\"fas fa-user\"></i>";
+        }
+        else{
+            $logo='<img src="'.$_SESSION['User_info']['photo'].'" class="rounded-circle z-depth-0" alt="avatar image" width="45" height="40">';
+        }
         $alert=null;
         if(isset($_SESSION['alert']))
         {
@@ -60,7 +67,7 @@ class LkModel
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink-333" data-toggle="dropdown"
           aria-haspopup="true" aria-expanded="false">
-          <i class="fas fa-user"></i>
+          '.$logo.'
         </a>
         <div class="dropdown-menu dropdown-menu-lg-right dropdown-default"
           aria-labelledby="navbarDropdownMenuLink-333">
@@ -75,6 +82,13 @@ class LkModel
 
     public function LkSettings() // Страница настроек
     {
+        if(!isset($_SESSION['User_info']['photo'][0]))
+        {
+            $logo=" <i class=\"fas fa-user\"></i>";
+        }
+        else{
+            $logo='<img src="'.$_SESSION['User_info']['photo'].'" class="rounded-circle z-depth-0" alt="avatar image" width="45" height="40">';
+        }
         $alert=null;
         if(isset($_SESSION['alert']))
         {
@@ -122,7 +136,7 @@ class LkModel
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink-333" data-toggle="dropdown"
           aria-haspopup="true" aria-expanded="false">
-          <i class="fas fa-user"></i>
+           '.$logo.'
         </a>
         <div class="dropdown-menu dropdown-menu-lg-right dropdown-default"
           aria-labelledby="navbarDropdownMenuLink-333">
@@ -135,7 +149,7 @@ class LkModel
         $this->content=$alert.'<div class="row justify-content-center mt-4"><div class="container"> '.$alert.'</div>
    <div class="col-lg-6">
      <div class="card card-body">
-       <form action="/DverController/Update" method="post" class="needs-validation" novalidate>
+       <form action="/DverController/Update" method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
            <div class="form-row">
                <div class="col-lg-6 mb-3">
                    <label for="validationCustom01">Изменить Имя</label>
@@ -171,6 +185,17 @@ class LkModel
                    </div>
                </div>
                
+               <div class="col-12 mb-3">
+               <label for="inputGroupFile01">Изменить Аватарку</label>
+                   <div class="input-group">
+                   
+                        
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input" name="UserPhoto" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01">
+                            <label class="custom-file-label" for="inputGroupFile01">Выберите файл</label>
+                        </div>
+                    </div>
+               </div>
            </div>
 
           

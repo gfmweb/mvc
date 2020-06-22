@@ -82,7 +82,8 @@ final class DverController
         {
            $result=UsersAtions::Update($params);
            $action = stripos($result, "email");
-            if ($action === false) {
+
+          if ($action === false) {
                 $_SESSION['success']='Изменения успешно внесены';
             }
             else

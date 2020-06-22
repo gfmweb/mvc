@@ -5,7 +5,7 @@ namespace models;
 
 use config\Db;
 use models\Mail;
-
+use models\SimpleImage;
 class UsersAtions
 {
 
@@ -154,9 +154,14 @@ class UsersAtions
             {
                 $Target=$el['val'];
             }
+            elseif ($el['param']==='UserPhoto')
+            {
+                $Photo=$el['val'];
+            }
         }
-        if(!isset($Password)){$Password='stay_old_password_1';}
-        if(isset($User,$Email,$Password,$Target)) // Если собраны все необходимые элементы для того чтобы Что-то могла быть изменено
+          if(!isset($Photo)){$Photo='no_photo';}
+          if(!isset($Password)){$Password='stay_old_password_1';}
+          if(isset($User,$Email,$Password,$Target,$Photo)) // Если собраны все необходимые элементы для того чтобы Что-то могла быть изменено
         {
             $db=Db::init();
             $req=$db->query("SELECT * FROM `users` WHERE `id` = '".$Target."'");
@@ -175,72 +180,78 @@ class UsersAtions
                 {
                     $password_flag=true;
                 }
-
-                // Варианты развития событий
-                //1. Поменялось только ИМЯ
-                if((isset($name_flag))&&(!isset($mail_flag))&&(!isset($password_flag)))
+                if($Photo!=='no_photo')
+                {
+                    $photo_flag=true;
+                }
+                $result=''; // Создаем пустой результат
+                if(isset($name_flag))
                 {
                     $db->query("UPDATE `users` SET `name` = '".$db->escape_string($User)."' WHERE `id` = '".$Target."'");
                     $_SESSION['User_info']['name']=$User;
-                    return 'name_changed';
+                    $result .= '_name_changed_';
                 }
-                //2. Поменялась только ПОЧТА
-                if((!isset($name_flag))&&(isset($mail_flag))&&(!isset($password_flag)))
+                if(isset($mail_flag))
                 {
                     $db->query("UPDATE `users` SET `email` = '".$db->escape_string($Email)."', `confirm`=FALSE WHERE `id` = '".$Target."'");
                     $mail_send = new Mail($_SERVER['SERVER_NAME']); // Создаём экземпляр класса
                     $mail_send->setFromName("Администрация сайта"); // Устанавливаем имя в обратном адресе
                     $mail_send->send($Email, "Подтверждение нового почтового ящика", "<h3>Здравствуйте ".$User."!</h3><p>Вы получили это письмо для подтверждения изменения почтового ящика  на сайте <strong>".$_SERVER['SERVER_NAME']."</strong> </p><p>Для активации Вашего аккаунта пройдите по ссылке: <a href='https://".$_SERVER['SERVER_NAME']."/DverController/activate?login=".$curent_user['password']."&mail=".$Email."'>https://".$_SERVER['SERVER_NAME']."/DverController/activate?login=".$curent_user['password']."&mail=".$Email."</a></p>");
-                    return 'email_changed';
-                }
-                //3. Поменялся только ПАРОЛЬ
-                if((!isset($name_flag))&&(!isset($mail_flag))&&(isset($password_flag)))
-                {
+                    $result .= '_email_changed_';
 
+                }
+                if(isset($password_flag))
+                {
                     $new_pass=password_hash($Password,PASSWORD_DEFAULT);
                     $db->query("UPDATE `users` SET `password` = '".$new_pass."' WHERE `id` = '".$Target."'");
-                    return 'password_changed';
+                    $result .= '_password_changed_';
                 }
-                //4. Поменялось ИМЯ и ПОЧТА
-                if((isset($name_flag,$mail_flag))&&(!isset($password_flag)))
-                    {
-                        $db->query("UPDATE `users` SET `name`= '".$User."', `email` = '".$db->escape_string($Email)."', `confirm`=FALSE WHERE `id` = '".$Target."'");
-                        $mail_send = new Mail($_SERVER['SERVER_NAME']); // Создаём экземпляр класса
-                        $mail_send->setFromName("Администрация сайта"); // Устанавливаем имя в обратном адресе
-                        $mail_send->send($Email, "Подтверждение нового почтового ящика", "<h3>Здравствуйте ".$User."!</h3><p>Вы получили это письмо для подтверждения изменения почтового ящика  на сайте <strong>".$_SERVER['SERVER_NAME']."</strong> </p><p>Для активации Вашего аккаунта пройдите по ссылке: <a href='https://".$_SERVER['SERVER_NAME']."/DverController/activate?login=".$curent_user['password']."&mail=".$Email."'>https://".$_SERVER['SERVER_NAME']."/DverController/activate?login=".$curent_user['password']."&mail=".$Email."</a></p>");
-                        return 'name_email_changed';
+                if(isset($photo_flag))
+                {
+
+                    if(($Photo['error'] === 0) && $Photo['type'] == "image/png") {
+                        $name=uniqid().".png";
+                        move_uploaded_file($Photo['tmp_name'], "content/avatars/".$name); // Переносим полученный файл
+                        $new_photo="content/avatars/".$name;
+                        $image = new SimpleImage();
+                        $image->load($new_photo);
+                        $image->resizeToWidth(250);
+                        $image->save('content/avatars/ava_'.$name);
+                        $new_photo="/content/avatars/ava_".$name;
+                        unlink('content/avatars/'.$name);
                     }
-                //5. Поменялось ИМЯ и ПАРОЛЬ
-                if((isset($name_flag,$password_flag))&&(!isset($mail_flag)))
-                {
-                    $new_pass=password_hash($Password,PASSWORD_DEFAULT);
-                    $db->query("UPDATE `users` SET `name`=".$User." `password` = '".$new_pass."' WHERE `id` = '".$Target."'");
-                    $_SESSION['User_info']['name']=$User;
-                    return 'name_password_changed';
+                    if(($Photo['error'] === 0) && $Photo['type'] == "image/jpeg") {
+                        $name=uniqid().".jpeg";
+                        move_uploaded_file($Photo['tmp_name'], "content/avatars/".$name); // Переносим полученный файл
+                        $new_photo="content/avatars/".$name;
+                        $image = new SimpleImage();
+                        $image->load($new_photo);
+                        $image->resizeToWidth(250);
+                        $image->save('content/avatars/ava_'.$name);
+                        $new_photo="/content/avatars/ava_".$name;
+                        unlink('content/avatars/'.$name);
+                    }
+                    if(($Photo['error'] === 0) && $Photo['type'] == "image/gif") {
+                        $name=uniqid().".gif";
+                        move_uploaded_file($Photo['tmp_name'], "content/avatars/".$name); // Переносим полученный файл
+                        $new_photo="content/avatars/".$name;
+                        $image = new SimpleImage();
+                        $image->load($new_photo);
+                        $image->resizeToWidth(250);
+                        $image->save('content/avatars/ava_'.$name);
+                        $new_photo="/content/avatars/ava_".$name;
+                        unlink('content/avatars/'.$name);
+                    }
+
+
+                    $_SESSION['User_info']['photo']=$new_photo;
+                    $db->query("UPDATE `users` SET `photo` = '".$new_photo."' WHERE `id` = '".$Target."'");
+                    $result .= '_photo_changed_';
                 }
-                //6. Поменялось ПОЧТА и ПАРОЛЬ
-                if((!isset($name_flag))&&(isset($mail_flag,$password_flag)))
-                {
-                    $new_pass=password_hash($Password,PASSWORD_DEFAULT);
-                    $db->query("UPDATE `users` SET `email` = '".$db->escape_string($Email)."', `confirm`=FALSE,`password`= '".$new_pass."' WHERE `id` = '".$Target."'");
-                    $mail_send = new Mail($_SERVER['SERVER_NAME']); // Создаём экземпляр класса
-                    $mail_send->setFromName("Администрация сайта"); // Устанавливаем имя в обратном адресе
-                    $mail_send->send($Email, "Подтверждение нового почтового ящика", "<h3>Здравствуйте ".$User."!</h3><p>Вы получили это письмо для подтверждения изменения почтового ящика  на сайте <strong>".$_SERVER['SERVER_NAME']."</strong> </p><p>Для активации Вашего аккаунта пройдите по ссылке: <a href='https://".$_SERVER['SERVER_NAME']."/DverController/activate?login=".$curent_user['password']."&mail=".$Email."'>https://".$_SERVER['SERVER_NAME']."/DverController/activate?login=".$curent_user['password']."&mail=".$Email."</a></p>");
-                    return 'email_password_changed';
-                }
-                //7. Поменялось ИМЯ ПОЧТА ПАРОЛЬ
-                if(isset($name_flag,$mail_flag,$password_flag))
-                {
-                    $new_pass=password_hash($Password,PASSWORD_DEFAULT);
-                    $db->query("UPDATE `users` SET `name` = '".$User."',`email` = '".$db->escape_string($Email)."', `confirm`=FALSE,`password`= '".$new_pass."' WHERE `id` = '".$Target."'");
-                    $mail_send = new Mail($_SERVER['SERVER_NAME']); // Создаём экземпляр класса
-                    $mail_send->setFromName("Администрация сайта"); // Устанавливаем имя в обратном адресе
-                    $mail_send->send($Email, "Подтверждение нового почтового ящика", "<h3>Здравствуйте ".$User."!</h3><p>Вы получили это письмо для подтверждения изменения почтового ящика  на сайте <strong>".$_SERVER['SERVER_NAME']."</strong> </p><p>Для активации Вашего аккаунта пройдите по ссылке: <a href='https://".$_SERVER['SERVER_NAME']."/DverController/activate?login=".$curent_user['password']."&mail=".$Email."'>https://".$_SERVER['SERVER_NAME']."/DverController/activate?login=".$curent_user['password']."&mail=".$Email."</a></p>");
-                    return 'name_email_password_changed';
-                }
+
             }
         }
-
+        return $result;
     }
 
 
