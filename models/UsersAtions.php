@@ -213,7 +213,7 @@ class UsersAtions
                         unset($curent_user['photo']);
                     }
                     if(($Photo['error'] === 0) && $Photo['type'] == "image/png") {
-                        $name=uniqid().".png";
+                        $name=uniqid('', true).".png";
                         move_uploaded_file($Photo['tmp_name'], "content/avatars/".$name); // Переносим полученный файл
                         $new_photo="content/avatars/".$name;
                         $image = new SimpleImage();
@@ -224,7 +224,7 @@ class UsersAtions
                         unlink('content/avatars/'.$name);
                     }
                     if(($Photo['error'] === 0) && $Photo['type'] == "image/jpeg") {
-                        $name=uniqid().".jpeg";
+                        $name=uniqid('', true).".jpeg";
                         move_uploaded_file($Photo['tmp_name'], "content/avatars/".$name); // Переносим полученный файл
                         $new_photo="content/avatars/".$name;
                         $image = new SimpleImage();
@@ -235,7 +235,7 @@ class UsersAtions
                         unlink('content/avatars/'.$name);
                     }
                     if(($Photo['error'] === 0) && $Photo['type'] == "image/gif") {
-                        $name=uniqid().".gif";
+                        $name=uniqid('', true).".gif";
                         move_uploaded_file($Photo['tmp_name'], "content/avatars/".$name); // Переносим полученный файл
                         $new_photo="content/avatars/".$name;
                         $image = new SimpleImage();
@@ -246,10 +246,11 @@ class UsersAtions
                         unlink('content/avatars/'.$name);
                     }
 
-
+                    if(isset($new_photo)){
                     $_SESSION['User_info']['photo']=$new_photo;
                     $db->query("UPDATE `users` SET `photo` = '".$new_photo."' WHERE `id` = '".$Target."'");
                     $result .= '_photo_changed_';
+                    }
                 }
 
             }
@@ -257,5 +258,75 @@ class UsersAtions
         return $result;
     }
 
-
+    public static function ChangeFormModal($params=null)
+    {
+        if($params[0]['val']==='Регистрация')
+        {
+            $result=array('act'=>'/DverController/register',
+                          'name'=>'Регистрация',
+                          'form'=>'            <div class="md-form mb-5">
+                                                    <i class="fas fa-user  prefix grey-text"></i>
+                                                    <input type="text" name="UserName" id="defaultForm-name" class="form-control validate" autofocus required>
+                                                    <label data-error="" data-success="" for="defaultForm-name">Ваше Имя</label>
+                                                  </div>
+                                                <div class="md-form mb-5">
+                                                    <i class="fas fa-envelope prefix grey-text"></i>
+                                                    <input type="email" name="UserEmail" id="defaultForm-email" class="form-control validate" required>
+                                                    <label data-error="" data-success="" for="defaultForm-email">Ваша почта</label>
+                                                  </div>
+                                                  <div class="md-form mb-4">
+                                                    <i class="fas fa-lock prefix grey-text"></i>
+                                                    <input type="password"  name="UserPassword"  id="defaultForm-pass" class="form-control validate" required>
+                                                    <label data-error="" data-success="" for="defaultForm-pass">Ваш пароль</label>
+                                                  </div>
+                                                 <input  type="hidden" value="'.$_SESSION['ValidateFormAccess'].'" id="ValidateFormAccess" name="ValidateFormAccess" > ',
+                          'footer'=>'<button class="btn btn-default" type="submit">Зарегистрироваться</button>',
+                           'last'=>'<div class="row justify-content-between">
+                                        <span  class="loginLink"  onclick="changed(\'Вход\')">&nbsp;Вход</span>
+                                        <span  class="loginLink" onclick="changed(\'Восстановление пароля\')">Забыли пароль&nbsp;</span>
+                                    </div>' );
+        }
+        elseif($params[0]['val']==='Восстановление пароля')
+        {
+            $result=array('act'=>'/DverController/remind',
+                'name'=>'Восстановление пароля',
+                'form'=>'<div class="md-form mb-5">
+                                            <div class="md-form mb-2">
+                                                <i class="fas fa-envelope prefix grey-text"></i>
+                                                <input type="email" name="UserEmail" id="defaultForm-email" class="form-control validate" required>
+                                                <label data-error="" data-success="" for="defaultForm-email">Ваша почта указанная при регистрации</label>
+                                            </div> 
+                                             <input  type="hidden" value="'.$_SESSION['ValidateFormAccess'].'" id="ValidateFormAccess" name="ValidateFormAccess" >
+                                            
+                                            ',
+                'footer'=>'<button class="btn btn-default" type="submit">Восстановить</button>',
+                'last'=>'<div class="row justify-content-between">
+                                        <span  class="loginLink"   onclick="changed(\'Вход\')">&nbsp;Вход</span>
+                                        <span  class="loginLink"  onclick="changed(\'Регистрация\')">Регистрация&nbsp;</span>
+                                    </div>' );
+        }
+        elseif($params[0]['val']==='Вход')
+        {
+            $result=array(
+                          'act'=>'/DverController/login',
+                          'name'=>'Вход',
+                          'form'=>'<div class="md-form mb-5">
+                                                    <i class="fas fa-envelope prefix grey-text"></i>
+                                                    <input type="email" name="UserEmail" id="defaultForm-email" class="form-control validate" required>
+                                                    <label data-error="" data-success="" for="defaultForm-email">Ваша почта</label>
+                                                  </div>
+                                                  <div class="md-form mb-4">
+                                                    <i class="fas fa-lock prefix grey-text"></i>
+                                                    <input type="password"  name="UserPassword"  id="defaultForm-pass" class="form-control validate" required>
+                                                    <label data-error="" data-success="" for="defaultForm-pass">Ваш пароль</label>
+                                                  </div>
+                                                 <input  type="hidden" value="'.$_SESSION['ValidateFormAccess'].'" id="ValidateFormAccess" name="ValidateFormAccess" >',
+                          'footer'=>'  <button class="btn btn-default" type="submit">Войти</button>',
+                           'last'=>'<div class="row justify-content-between">
+                                        <span  class="loginLink"   onclick="changed(\'Регистрация\')">&nbsp;Регистрация</span>
+                                        <span  class="loginLink"  onclick="changed(\'Восстановление пароля\')">Забыли пароль&nbsp;</span>
+                                    </div>   ' );
+        }
+        return $result;
+    }
 }

@@ -29,5 +29,8 @@ include('template/footer_str.php');
 
 <?=$model->script?>
 
+
+
+
 </body>
 </html>

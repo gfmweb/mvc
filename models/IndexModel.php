@@ -7,228 +7,156 @@
 
 namespace models;
 
+use models\Navbar;
 
-class IndexModel
+class IndexModel Extends Model
 {
     /**
+     *  parent:: pages - содержание списка страниц проекта
+     *
      * content - содержание контентной части индексной страницы
+     * title -  значения Тайтл
+     * script - Скрипты страницы
+     * alert - Алерты страницы
+     * navbar - Навигационная панель
+     *
+     *
      */
 
     public $content;
     public $title;
     public $script;
+    public $alert;
+    public $navbar;
 
 
-    public function login()
+
+    public function index() //Главная страница сайта если пользователь незалогинен
     {
-        $alert=null;
-        if(isset($_SESSION['alert']))
+        $alert=null; // Переменная в которой возможно будет храниться Алерт
+
+        if(isset($_SESSION['alert'])) // Проверяем есть ли Алерт с ошибкой
         {
-           $alert="<div class=\"alert alert-danger alert-dismissible fade show\" role=\"alert\">
-                        <strong>".$_SESSION['alert']."</strong> 
-                        <button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\">
-                            <span aria-hidden=\"true\">&times;</span>
-                        </button>
-                  </div>
-                  ";
-           unset($_SESSION['alert']);
+           $this->alert="<div class=\"alert alert-danger alert-dismissible fade show\" role=\"alert\">
+                            <strong>".$_SESSION['alert']."</strong> 
+                            <button type=\"button\" class=\"close\" id='cls-but' data-dismiss=\"alert\" aria-label=\"Close\">
+                                <span aria-hidden=\"true\">&times;</span>
+                            </button>
+                        </div>";
+
+           unset($_SESSION['alert']); // Обнуляем записанный в сессию алерт
         }
-        if(isset($_SESSION['success']))
+        if(isset($_SESSION['success'])) // Проверяем есть ли алерт с Успехом
         {
-            $alert="<div class=\"alert alert-success alert-dismissible fade show\" role=\"alert\">
-                        <strong>".$_SESSION['success']."</strong> 
-                        <button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\">
-                            <span aria-hidden=\"true\">&times;</span>
-                        </button>
-                  </div>
-                  ";
-            unset($_SESSION['success']);
+            $this->alert="<div class=\"alert alert-success alert-dismissible fade show\" role=\"alert\">
+                                <strong>".$_SESSION['success']."</strong> 
+                                <button type=\"button\" class=\"close\" id='cls-but' data-dismiss=\"alert\" aria-label=\"Close\">
+                                    <span aria-hidden=\"true\">&times;</span>
+                                </button>
+                           </div>";
+
+            unset($_SESSION['success']); // Обнуляем записанный в сессию алерт
         }
 
-        $this->title="Вход";
-        $this->content='<div class="row justify-content-center mt-4"><div class="container"> '.$alert.'</div>
-   <div class="col-lg-6">
-     <div class="card card-body">
-       <form action="/DverController/login" method="post" class="needs-validation" novalidate>
-           <div class="form-row">
-               <div class="col-lg-6 mb-3">
-                   <label for="validationCustom01">E-mail</label>
-                   <input type="email" name="UserEmail" class="form-control" id="validationCustom01" placeholder="email"  autofocus autocomplete="off"
-                          required>
-                   <div class="valid-feedback">
-                       Норм!
-                   </div>
-                   <div class="invalid-feedback">
-                       Введите E-mail
-                   </div>
-               </div>
-               <div class="col-lg-6 mb-3">
-                   <label for="validationCustom02">Пароль</label>
-                   <input type="password" name="UserPassword" class="form-control" id="validationCustom02" placeholder="Пароль" 
-                          required>
-                   <div class="valid-feedback">
-                       Норм!
-                   </div>
-                   <div class="invalid-feedback">
-                       Введите пароль
-                   </div>
-               </div>
-               
-           </div>
 
-          
-            <div class="form-group">
-               
-                   <input class="form-control" type="hidden" value="'.$_SESSION['ValidateFormAccess'].'" id="ValidateFormAccess" name="ValidateFormAccess" >
-                  
-              
-           </div>
-           <button class="btn btn-block blue-gradient" type="submit">Войти</button>
-       </form>
-       <div class="form-row">
-       <div class="col-lg-6 mt-3"><a href="/IndexController/register"><button class="btn btn-block btn-outline-success waves-effect">Регистрация</button></a></div>
-       <div class="col-lg-6 mt-3"><a href="/IndexController/remind"><button class="btn btn-block btn-outline-secondary waves-effect">Восстановление доступа</button></a></div>
-       </div>
-     </div>
-   </div>
-</div>';
-        $this->script="";
+        $this->navbar = Navbar::GetNav('Главная',$this->pages,false,$this->alert); // передаем на построение верхнее меню 1-Активная страница ИМЯ 2-Массив страниц 3. Залогинены / нет 4. Алерт если он есть
+
+        $this->title='MVC'; // Записываем Тайтл нашей страницы
+
+        $this->content=$this->navbar.'
+                    <div class="modal fade" id="modalLoginForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="false">
+                        <div class="modal-dialog" role="document">
+                           <form id="form" action="/DverController/login" method="post" class="needs-validation" novalidate>
+                                <div class="modal-content">
+                                    <div class="modal-header text-center">
+                                        <h4 class="modal-title w-100 font-weight-bold" id="FormName">Вход</h4>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body mx-3">
+                                            <div class="md-form mb-5">
+                                                <i class="fas fa-envelope prefix grey-text"></i>
+                                                <input type="email" name="UserEmail" id="defaultForm-email" class="form-control validate" required>
+                                                <label data-error="" data-success="" for="defaultForm-email">Ваша почта</label>
+                                            </div>
+                                            <div class="md-form mb-4">
+                                                <i class="fas fa-lock prefix grey-text"></i>
+                                                <input type="password"  name="UserPassword"  id="defaultForm-pass" class="form-control validate" required>
+                                                <label data-error="" data-success="" for="defaultForm-pass">Ваш пароль</label>
+                                            </div>
+                                            <input  type="hidden" value="'.$_SESSION['ValidateFormAccess'].'" id="ValidateFormAccess" name="ValidateFormAccess" >
+                                    </div>
+                                    <div class="modal-footer d-flex justify-content-center">
+                                            <button class="btn btn-default" type="submit">Войти</button>
+                                    </div>
+                           </form>                                                          
+                            <div class="container mb-3" id="last">
+                                <div class="row justify-content-between">
+                                    <span  class="loginLink"  onclick="changed(\'Регистрация\')">&nbsp;Регистрация</span>
+                                    <span  class="loginLink" onclick="changed(\'Восстановление пароля\')">Забыли пароль&nbsp;</span>
+                                </div>     
+                            </div>
+                        </div>
+                    </div>
+                    
+                    
+                    
+                    
+                   <script>
+                   function changed(val)
+                   {
+                       $.ajax({ 
+                         type: \'POST\', 
+                         dataType: \'json\',
+                         url: \'/DverController/changeform\', 
+                         data: { \'form\': val }, 
+                        success: function (data) { 
+                            $(\'#FormName\').text(data.name);
+                            $(\'#form\').attr(\'action\',data.act);
+                            $(\'.modal-body\').html(data.form);
+                            $(\'.modal-footer\').html(data.footer);
+                            $(\'#last\').html(data.last);
+                            
+                            
+                                }
+                        });
+                   }
+</script> 
+                    
+                    
+                    
+                   
+                   
+                    
+                    '; // Формируем полученный НАВБАР и Активное содержимое
+
+        $this->script='
+      
+    (function() {
+        \'use strict\';
+        window.addEventListener(\'load\', function() {
+
+            var forms = document.getElementsByClassName(\'needs-validation\');
+
+            var validation = Array.prototype.filter.call(forms, function(form) {
+                form.addEventListener(\'submit\', function(event) {
+                    if (form.checkValidity() === false) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add(\'was-validated\');
+                }, false);
+            });
+        }, false);
+    })();
+    
+'; // Добавляем скрипт
+
         return $this;
     }
-    public function register()
-    {
-        $this->title="Регистрация";
-        $this->content='<div class="row justify-content-center mt-4">
-   <div class="col-lg-6">
-     <div class="card card-body">
-       <form action="/DverController/register"  method="post" class="needs-validation" novalidate>
-           <div class="form-row">
-               <div class="col-lg-6 mb-3">
-                   <label for="validationCustom01">Как Вас зовут?</label>
-                   <input type="text" name="UserName" class="form-control" id="validationCustom01" placeholder="Представьтесь пожалуйста" autofocus
-                          required>
-                   <div class="valid-feedback">
-                       Норм!
-                   </div>
-                   <div class="invalid-feedback">
-                       Напишите как Вас зовут
-                   </div>
-               </div>
-             
-               <div class="col-lg-6 mb-3">
-                   <label for="validationCustomUserEmail">E-mail</label>
-                   <div class="input-group">
-                      
-                       <input type="email" name="UserEmail" class="form-control" id="validationCustomUserEmail" placeholder="Ваша почта"
-                              aria-describedby="inputGroupPrepend" required>
-                       <div class="valid-feedback">
-                           Норм!
-                       </div>
-                       <div class="invalid-feedback">
-                           Укажите Вашу почту
-                       </div>
-                   </div>
-               </div>
-                <div class="col-lg-12 mb-3">
-                   <label for="validationCustomUserPassword">Пароль</label>
-                   <div class="input-group">
-                      
-                       <input type="password" name="UserPassword" class="form-control" id="validationCustomUserPassword"  placeholder="Придумайте пароль"
-                              aria-describedby="inputGroupPrepend" required>
-                       <div class="valid-feedback">
-                           Норм!
-                       </div>
-                       <div class="invalid-feedback">
-                           Придумайте пароль
-                       </div>
-                   </div>
-               </div>
-               
-           </div>
-
-           <div class="form-group">
-               <div class="form-check">
-                   <input class="form-check-input" type="checkbox" value="" id="invalidCheck" required>
-                   <label class="form-check-label" for="invalidCheck">
-                      
-                   </label>
-                   <span  style="cursor: pointer" data-toggle="modal" data-target="#rulsandterms"> Принять правила и условия </span>
-                   <div class="invalid-feedback">
-                       Вы должны принять правила и условия
-                   </div>
-               </div>
-           </div>
-            <div class="form-group">
-                   <input class="form-control" type="hidden" value="'.$_SESSION['ValidateFormAccess'].'" id="ValidateFormAccess" name="ValidateFormAccess" >
-           </div>
-           <button class="btn btn-block blue-gradient" type="submit">Зарегистрироваться</button>
-       </form>
-       <div class="form-row">
-       <div class="col-lg-6 mt-3"><a href="/IndexController/login"><button class="btn btn-block btn-outline-success waves-effect" >Вход</button></a></div>
-       <div class="col-lg-6 mt-3"><a href="/IndexController/remind"><button class="btn btn-block btn-outline-secondary waves-effect">Восстановление доступа</button></a></div>
-       </div>
-     </div>
-   </div>
-</div>
-<div class="modal fade" id="rulsandterms" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4>Правила</h4>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-        
-      </div>
-      <div class="modal-body">
-        ...
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Понятно</button>
-        
-      </div>
-    </div>
-  </div>
-</div>
 
 
-';
-        $this->script='';
-        return $this;
-    }
-    public function remind()
-    {
-        $this->title="Восстановление доступа";
-        $this->content='<div class="row justify-content-center mt-4">
-   <div class="col-lg-6">
-     <div class="card card-body">
-       <form action="/DverController/remind" method="post" class="needs-validation" novalidate>
-           <div class="form-row">
-               <div class="col-12 mb-3">
-                   <label for="validationCustom01">Ваша почта, указанная при регистрации</label>
-                   <input type="email" name="UserEmail" class="form-control" id="validationCustom01" placeholder="Впишите сюда Вашу почту" autofocus autocomplete="off"
-                          required>
-                   <div class="valid-feedback">
-                       Норм!
-                   </div>
-                   <div class="invalid-feedback">
-                       Укажите почту
-                   </div>
-               </div>
-           </div>
-            <div class="form-group">
-                   <input class="form-control" type="hidden" value="'.$_SESSION['ValidateFormAccess'].'" id="ValidateFormAccess" name="ValidateFormAccess" >
-           </div>
-           <button class="btn btn-block blue-gradient" type="submit">Восстановить</button>
-       </form>
-       <div class="form-row">
-       <div class="col-lg-6 mt-3"><a href="/IndexController/login"><button class="btn btn-block btn-outline-success waves-effect">Вход</button></a></div>
-       <div class="col-lg-6 mt-3"><a href="/IndexController/register"><button class="btn btn-block btn-outline-secondary waves-effect" >Регистрация</button></a></div>
-       </div>
-     </div>
-   </div>
-</div>
-        ';
-        return $this;
-    }
+
+
 }

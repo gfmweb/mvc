@@ -123,7 +123,7 @@ class LkModel
   <div class="collapse navbar-collapse" id="navbarSupportedContent-333">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item ">
-        <a class="nav-link" href="/IndexController/lk">Личный кабинет
+        <a class="nav-link" href="/IndexController">Личный кабинет
          
         </a>
       </li>

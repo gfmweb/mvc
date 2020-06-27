@@ -31,10 +31,10 @@ final class DverController
             {
                 $_SESSION['alert']="Неверное имя пользователя или пароль";
             }
-            header('Location: http://'.$_SERVER['SERVER_NAME']);
+            header('Location: /');
         }
         else{
-            Header('Location: http://'.$_SERVER['SERVER_NAME'].'/404.php?er_title='.urlencode("УПС! Отказ обработки формы").'&description='.urlencode("Форма не прошла проверку правомерности использования").'&action='.urlencode("<a href=\"http://".$_SERVER['SERVER_NAME']."\">Вернуться на сайт</a>"));
+            Header('Location: /404.php?er_title='.urlencode("УПС! Отказ обработки формы").'&description='.urlencode("Форма не прошла проверку правомерности использования").'&action='.urlencode("<a href=\"http://".$_SERVER['SERVER_NAME']."\">Вернуться на сайт</a>"));
         }
 
     }
@@ -54,7 +54,7 @@ final class DverController
                     $_SESSION['alert']='Ваш E-mail уже зарегистрирован в системе, попробуйте войти с его помощью';
 
                 }
-            header('Location: http://'.$_SERVER['SERVER_NAME']);
+            header('Location: /');
         }
     }
 
@@ -63,7 +63,7 @@ final class DverController
         if(ValidateAccess::ValidAccess($params)) // Если форма пришла с нашего сайта то Работаем
         {
             UsersAtions::Remind($params);
-            header("Location: http://".$_SERVER['SERVER_NAME']);
+            header("Location: /");
         }
     }
 
@@ -73,7 +73,7 @@ final class DverController
         if($re===1)
         {
             $_SESSION['success']="Ваш E-mail был успешно подтвержден. Теперь Вы можете авторизироваться на сайте";
-            header("Location: http://".$_SERVER['SERVER_NAME']);
+            header("Location: /");
         }
     }
     public function update($params=null)
@@ -93,5 +93,10 @@ final class DverController
             }
          header('Location: /');
         }
+    }
+    public function changeform($params=null)
+    {
+        $data=UsersAtions::ChangeFormModal($params);
+        echo(json_encode($data));
     }
 }

@@ -15,44 +15,25 @@ final class IndexController
      * @param null $params
      */
 
-   public function index($params=null)
+
+
+    public function index($params=null) // Вход
     {
-        if(!isset($_SESSION['User'])){ // Если наш пользователь не авторизирован, то отправляем его на окно входа
-            header('Location:/IndexController/login');
+        if(!isset($_SESSION['User'])) {
+            require('models/IndexModel.php'); // подключение модели
+            $model = new IndexModel(); // Создание экземпляра класса
+            $model->index(); // Заполнили модель данными по ЛОГИНУ
+            include('views/index/index.php'); // подключение вида
         }
-        else
-        {
-            header('Location:/IndexController/lk');
+        else{
+            $model= new LkModel();
+            $model->GenerateLk();
+            include('views/lk/index.php');
         }
-
-    }
-    public function login($params=null) // Вход
-    {
-        require ('models/IndexModel.php'); // подключение модели
-        $model = new IndexModel(); // Создание экземпляра класса
-        $model->login(); // Заполнили модель данными по ЛОГИНУ
-        include ('views/index/index.php'); // подключение вида
     }
 
-    public function register($params=null) // Регистрация
-    {
-        $model= new IndexModel();
-        $model->register();
-        include ('views/index/index.php');
-    }
-    public function remind($params=null) // Восстановление
-    {
-        $model= new IndexModel();
-        $model->remind();
-        include ('views/index/index.php');
-    }
 
-    public function lk($params=null)
-    {
-       $model= new LkModel();
-       $model->GenerateLk();
-       include('views/lk/index.php');
-    }
+
     public function lkSettings($params=null)
     {
         $model= new LkModel();

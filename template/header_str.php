@@ -1,6 +1,7 @@
-  <link rel="icon" href="/views/img/mdb-favicon.ico" type="image/x-icon">
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
-  <link rel="stylesheet" href="/views/css/bootstrap.min.css">
-  <link rel="stylesheet" href="/views/css/mdb.min.css">
-  <link rel="stylesheet" href="/views/css/style.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta http-equiv="x-ua-compatible" content="ie=edge">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
+<link href="/views/css/bootstrap.min.css" rel="stylesheet">
+<link href="/views/css/mdb.min.css" rel="stylesheet">
+<link href="/views/css/style.css" rel="stylesheet">
