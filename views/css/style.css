@@ -28,3 +28,4 @@ body,
 /* Footer color for sake of consistency with Navbar */
 .page-footer {
   background-color: #1C2331; }
+.loginLink{color:#1C2331; cursor: pointer; }

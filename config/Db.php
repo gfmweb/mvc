@@ -21,6 +21,7 @@ class Db
             self::$_con->set_charset("utf8");
             self::$_con->query("SET NAMES UTF8");
             self::$_con->query("SET CHARACTER SET UTF8");
+
         }
         return self::$_con;
     }
