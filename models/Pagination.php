@@ -12,7 +12,7 @@ class Pagination
     private $pagi_end;
     public function __construct($Position=null,$Pages=0,$Controller=null,$PageName=null)
     {
-        if($Pages!==0)
+        if($Pages>0)
         { // Если вообще есть необходимость в пагинации
 
         // Начало пагинации
@@ -111,9 +111,10 @@ class Pagination
         }
         else // Если уложились в 10 страниц
         {
+
             for($i=2; $i<=$Pages; $i++)
             {
-                if($i===$Position)
+                if($i==$Position)
                 {
                     $this->pagi_body.='<li class="page-item active">
                                                <a class="page-link">'.$i.' <span class="sr-only">(current)</span></a>
@@ -128,13 +129,19 @@ class Pagination
             }
             if($Position!==$Pages)
             {
+
                 $NextPage=$Position+1;
+                if($NextPage<=$Pages){
                 $this->pagi_end=' <li class="page-item ">
                                                     <a href="/'.$Controller.'?'.$PageName.'='.$NextPage.'" class="page-link">Далее</a>
                                                 </li>
                                             </ul>
                                          </nav>
                                     </div>';
+                }
+                else{$this->pagi_end='</ul>
+                              </nav>
+                          </div>';}
             }
             else{
                 $this->pagi_end='</ul>
