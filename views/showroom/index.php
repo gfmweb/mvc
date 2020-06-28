@@ -11,13 +11,16 @@
     include('template/header_str.php');
 
     ?>
-
+<style>
+    body{background-color: rgba(54,154,167,0.88)}
+</style>
 </head>
 <body >
-    <div class="row blue-gradient color-block  " style="width: 100%">
+<div class="container-lg blue-gradient  text-center" style="width: 100%"> </div>
 
-    <?= $model->navbar ?>
-    <div class="container-fluid "  id="materials">
+
+<?= $model->navbar ?>
+    <div class="container-fluid "  id="materials" style="min-height: 80%">
         <?= $model->content_result ?>
     </div>
 
@@ -25,11 +28,10 @@
         <?= $model->content ?>
     </div>
 
-
 <?php
     include('template/footer_str.php');
 ?>
-    </div>
+
 
 <script>
     $( document ).ready(function() {

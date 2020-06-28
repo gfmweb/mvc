@@ -1,6 +1,6 @@
 
 
-<footer class="row page-footer justify-content-center font-small 0
+<footer class=" page-footer justify-content-center font-small
  wow fadeIn">
 <div class="container text-center">
     <!--Call to action-->
