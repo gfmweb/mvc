@@ -4,12 +4,13 @@
 namespace controllers;
 
 use config\Db;
+use models\Pagination;
 
 class ContactsController
 {
     public function index($params=null)
     {
-      $db = Db::init();
+      /*$db = Db::init();
        $title=array('Природа','Работа','Отношения','Вино','Космос','Игры','Люди','Животные','Программирование','Еда','Учеба','PHP','SQL','Bootstrap','Машины','Стиль','Спорт','Вода','Осень','Лето','Coca-Cola','Мебель','Плакаты','Социум');
        $autors=array('Гофман','Петрик','Воронцов','Ларионов','Косова','Тужилова','Ковалёва');
        $description='Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.';
@@ -57,7 +58,8 @@ class ContactsController
             `link`        = '".$links [rand(0,count($links)-1)]."',
             `autor`       = '".$autors[rand(0,count($autors)-1)]."'
             ") or die($db->error);
-       }
-
+       }*/
+$pagi = new Pagination(176,190,'ShowRoomController','page');
+include 'views/contact/index.php';
     }
 }

@@ -14,7 +14,7 @@
 
 </head>
 <body >
-    <div class="row blue-gradient color-block mb-3 mx-auto h-100 z-depth-1-half" style="width: 100%">
+    <div class="row blue-gradient color-block  " style="width: 100%">
 
     <?= $model->navbar ?>
     <div class="container-fluid "  id="materials">
