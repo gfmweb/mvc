@@ -99,7 +99,7 @@ class Navbar
         return $nav;
     }
 
-    public static function GetNavSh($active_page='Главная',$page_array,$logined=false,$alert='',$formact=null)
+    public static function GetNavSh($active_page='Главная',$page_array,$logined=false,$alert='',$formact=null,$placeholder=null)
     {
 
         if(!isset($_SESSION['User_info']['photo']))
@@ -154,13 +154,13 @@ class Navbar
                         </li>';
             }
         }
-        $search='<form class="form-inline mr-auto" action="'.$formact.'" method="post">
-      <div class="md-form my-0">
-      <input class="form-control mr-sm-2" type="text" name="query" placeholder="Поиск" aria-label="Search" onkeyup="filterquery()">
-        <input  type="hidden" value="'.$_SESSION['ValidateFormAccess'].'" id="ValidateFormAccess" name="ValidateFormAccess" >
-         <i class="fa fa-search prefix text-white"></i>
-      </div>
-    </form>
+        $search='<form class="form-inline mr-auto"  method="post">
+                    <div class="md-form my-0">
+                        <input class="form-control mr-sm-2" type="text" name="query" placeholder="Поиск" aria-label="Search" value="'.$placeholder.'" onkeyup="filterquery()">
+                        <input  type="hidden" value="'.$_SESSION['ValidateFormAccess'].'" id="ValidateFormAccess" name="ValidateFormAccess" >
+                        <i class="fa fa-search prefix text-white"></i>
+                    </div>
+                </form>
     
     ';
         $nav='<nav class="navbar fixed-top navbar-expand-lg navbar-dark scrolling-navbar">

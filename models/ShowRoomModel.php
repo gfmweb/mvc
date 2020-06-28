@@ -14,6 +14,7 @@ class ShowRoomModel extends Model
     public $navbar;
     public $content_result;
     public $pagination;
+    public $SearchPlaysholder;
 
     public function index($req_method,$params)
     {
@@ -27,12 +28,15 @@ class ShowRoomModel extends Model
             $RowsCount= $db->affected_rows;
             $LastPage=$RowsCount % $maxcontent;
             $TotalPages=intdiv($RowsCount,$maxcontent); // Делим количество строк на количество материалов на странице
+
                 if(!isset($params)) {
-                    if ($TotalPages > 1) // Если нужна пагинация
+
+                    if ($TotalPages > 0) // Если нужна пагинация
                     {
 
                         if ($TotalPages >= 5) // Пагинация длинная
                         {
+
                             $req = $db->query("SELECT * FROM `materials` LIMIT {$maxcontent}"); //Запрашиваем все данные из таблицы
                             while ($row = $req->fetch_assoc()) {
                                 $data[] = $row; // Собираем массив данных
@@ -76,7 +80,7 @@ class ShowRoomModel extends Model
                         } else // Если пагинация укладывается в 5 страниц то будем выводить её полностью
                         {
 
-                            $req = $db->query("SELECT * FROM `materials`"); //Запрашиваем все данные из таблицы
+                            $req = $db->query("SELECT * FROM `materials` LIMIT {$maxcontent}"); //Запрашиваем все данные из таблицы
                             while ($row = $req->fetch_assoc()) {
                                 $data[] = $row; // Собираем массив данных
                             }
@@ -93,9 +97,9 @@ class ShowRoomModel extends Model
                                                             </li>';// Начало пагинации
 
                             if ($LastPage !== 0) {
-                                $iMax = ceil(count($data) / $maxcontent) - 1;
+                                $iMax = ceil(count($data) / $maxcontent);
                             } else {
-                                $iMax = count($data) / $maxcontent - 1;
+                                $iMax = count($data) / $maxcontent;
                             }
 
                             for ($i = 0; $i < $iMax; $i++) // Начинаем строить пагинацию
@@ -113,7 +117,15 @@ class ShowRoomModel extends Model
                         }
                     } else // Пагинация совсем не нужна
                     {
+
                         $this->pagination = '';
+                        $req = $db->query("SELECT * FROM `materials` LIMIT {$maxcontent}"); //Запрашиваем все данные из таблицы
+                        while ($row = $req->fetch_assoc()) {
+                            $data[] = $row; // Собираем массив данных
+                        }
+                        for ($cont = 0, $contMax = count($data); $cont < $contMax; $cont++) {
+                            $this->content_result .= $data[$cont]['content'];
+                        }
                     }
                 }
                 else // Если совершено действие в пагинации или пришел Ajax Запрос
@@ -127,7 +139,7 @@ class ShowRoomModel extends Model
                               unset($_SESSION['search']); // Уничтожаем фильтр
                           }
 
-                           if ($TotalPages > 1) // Если нужна пагинация
+                           if ($TotalPages >= 1) // Если нужна пагинация
                            {
 
                                if ($TotalPages >= 5) // Пагинация длинная
@@ -144,7 +156,7 @@ class ShowRoomModel extends Model
                                    if ($LastPage !== 0) {
                                        $iMax = ceil($RowsCount / $maxcontent);
                                    } else {
-                                       $iMax = $RowsCount / $maxcontent - 1;
+                                       $iMax = $RowsCount / $maxcontent ;
                                    }
 
                                    $this->pagination = ' <div class="row justify-content-center mt-5">  
@@ -175,7 +187,7 @@ class ShowRoomModel extends Model
                                } else // Если пагинация укладывается в 5 страниц то будем выводить её полностью
                                {
 
-                                   $req = $db->query("SELECT * FROM `materials`"); //Запрашиваем все данные из таблицы
+                                   $req = $db->query("SELECT * FROM `materials` LIMIT {$maxcontent}"); //Запрашиваем все данные из таблицы
                                    while ($row = $req->fetch_assoc()) {
                                        $data[] = $row; // Собираем массив данных
                                    }
@@ -192,9 +204,9 @@ class ShowRoomModel extends Model
                                                             </li>';// Начало пагинации
 
                                    if ($LastPage !== 0) {
-                                       $iMax = ceil(count($data) / $maxcontent) - 1;
+                                       $iMax = ceil(count($data) / $maxcontent);
                                    } else {
-                                       $iMax = count($data) / $maxcontent - 1;
+                                       $iMax = count($data) / $maxcontent;
                                    }
 
                                    for ($i = 0; $i < $iMax; $i++) // Начинаем строить пагинацию
@@ -219,15 +231,16 @@ class ShowRoomModel extends Model
                        else // Устанавливаем фильтр поиска
                         {
                             $_SESSION['search']=$params[0]['val'];
+                            $this->SearchPlaysholder=$_SESSION['search'];
                             /*TODO
                                Выполняем сбор данных с учетом того что ищет пользователь
                                Формируем Json ответ из 2х частей КОНТЕНТ и ПАГИНАЦИЯ !RETURN!
                           */
-                            $db->query("SELECT * FROM `materials` WHERE `title` LIKE '%{$db->real_escape_string($_SESSION['search'])}%' OR `description` LIKE '%{$db->real_escape_string($_SESSION['search'])}%' OR `autor` LIKE '%{$db->real_escape_string($_SESSION['search'])}%'");
+                            $db->query("SELECT * FROM `materials` WHERE `title` LIKE '%{$db->real_escape_string($_SESSION['search'])}%' OR `description` LIKE '%{$db->real_escape_string($_SESSION['search'])}%' OR `autor` LIKE '%{$db->real_escape_string($_SESSION['search'])}%' LIMIT {$maxcontent}");
                             $RowsCountAjax= $db->affected_rows;
                             $LastPage=$RowsCountAjax % $maxcontent;
                             $TotalPages=intdiv($RowsCountAjax,$maxcontent); // Делим количество строк на количество материалов на странице
-                            if ($TotalPages > 1) // Если нужна пагинация
+                            if ($TotalPages > 0) // Если нужна пагинация
                             {
 
                                 if ($TotalPages >= 5) // Пагинация длинная
@@ -275,7 +288,7 @@ class ShowRoomModel extends Model
                                 } else // Если пагинация укладывается в 5 страниц то будем выводить её полностью
                                 {
 
-                                    $req = $db->query("SELECT * FROM `materials`WHERE `title` LIKE '%{$db->real_escape_string($_SESSION['search'])}%' OR `description` LIKE '%{$db->real_escape_string($_SESSION['search'])}%' OR `autor` LIKE '%{$db->real_escape_string($_SESSION['search'])}%' LIMIT {$maxcontent}"); //Запрашиваем все данные из таблицы
+                                    $req = $db->query("SELECT * FROM `materials` WHERE `title` LIKE '%{$db->real_escape_string($_SESSION['search'])}%' OR `description` LIKE '%{$db->real_escape_string($_SESSION['search'])}%' OR `autor` LIKE '%{$db->real_escape_string($_SESSION['search'])}%' LIMIT {$maxcontent}"); //Запрашиваем все данные из таблицы
                                     while ($row = $req->fetch_assoc()) {
                                         $data[] = $row; // Собираем массив данных
                                     }
@@ -292,7 +305,7 @@ class ShowRoomModel extends Model
                                                             </li>';// Начало пагинации
 
                                     if ($LastPage !== 0) {
-                                        $iMax = count($data) / $maxcontent-+2;
+                                        $iMax = count($data) / $maxcontent;
                                     } else {
                                         $iMax = count($data) / $maxcontent;
                                     }
@@ -313,6 +326,13 @@ class ShowRoomModel extends Model
                             } else // Пагинация совсем не нужна
                             {
                                 $this->pagination = '';
+                                $req = $db->query("SELECT * FROM `materials` WHERE `title` LIKE '%{$db->real_escape_string($_SESSION['search'])}%' OR `description` LIKE '%{$db->real_escape_string($_SESSION['search'])}%' OR `autor` LIKE '%{$db->real_escape_string($_SESSION['search'])}%' LIMIT {$maxcontent}"); //Запрашиваем все данные из таблицы
+                                while ($row = $req->fetch_assoc()) {
+                                    $data[] = $row; // Собираем массив данных
+                                }
+                                for ($cont = 0, $contMax = count($data); $cont < $contMax; $cont++) {
+                                    $this->content_result .= $data[$cont]['content'];
+                                }
                             }
                             return $this;
                         }
@@ -333,7 +353,7 @@ class ShowRoomModel extends Model
                 </div>'; // Конец контентной части
 
         $this->content_result.=$this->pagination;
-        $this->navbar = Navbar::GetNavSh('Работы',$this->pages,false,$this->alert); // передаем на построение верхнее меню 1-Активная страница ИМЯ 2-Массив страниц 3. Залогинены / нет 4. Алерт если он есть
+        $this->navbar = Navbar::GetNavSh('Работы',$this->pages,false,$this->alert,'',$this->SearchPlaysholder); // передаем на построение верхнее меню 1-Активная страница ИМЯ 2-Массив страниц 3. Залогинены / нет 4. Алерт если он есть
 
         $this->title='Работы';
         $this->content=$this->alert.$this->loginModal;

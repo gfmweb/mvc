@@ -46,7 +46,7 @@ class ContactsController
        $trumbs=array(' <img src="https://mdbootstrap.com/img/Photos/Horizontal/Nature/6-col/img(115).jpg" class="img-fluid" alt="">',' <img src="https://mdbootstrap.com/img/Photos/Horizontal/Nature/6-col/img(116).jpg" class="img-fluid" alt="">',' <img src="https://mdbootstrap.com/img/Photos/Horizontal/Nature/6-col/img(117).jpg" class="img-fluid" alt="">');
        $links=array('/ShowController/show?id=1','/ShowController/show?id=2','/ShowController/show?id=3');
 
-       for($i=0; $i < 500; $i++)
+       for($i=0; $i < 2; $i++)
        {
            $db->query("INSERT INTO `materials` SET 
             `title`       = '".$title[rand(0,count($title)-1)]."',

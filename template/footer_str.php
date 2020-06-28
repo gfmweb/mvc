@@ -1,5 +1,8 @@
-<footer class="page-footer text-center font-small mt-4 wow fadeIn">
 
+
+<footer class="row page-footer justify-content-center font-small 0
+ wow fadeIn">
+<div class="container text-center">
     <!--Call to action-->
     <div class="pt-4">
         <a class="btn btn-outline-white" href="https://mdbootstrap.com/docs/jquery/getting-started/download/" target="_blank" role="button">Download MDB
@@ -55,8 +58,9 @@
         <a href="https://mdbootstrap.com/education/bootstrap/" target="_blank"> MDBootstrap.com </a>
     </div>
     <!--/.Copyright-->
-
+</div>
 </footer>
+
 <script type="text/javascript" src="/views/js/jquery-3.4.1.min.js"></script>
 <script type="text/javascript" src="/views/js/popper.min.js"></script>
 <script type="text/javascript" src="/views/js/bootstrap.min.js"></script>
