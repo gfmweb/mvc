@@ -4,6 +4,7 @@
 namespace controllers;
 
 use config\Db;
+use models\CRUD;
 use models\Pagination;
 
 class ContactsController
@@ -59,7 +60,10 @@ class ContactsController
             `autor`       = '".$autors[rand(0,count($autors)-1)]."'
             ") or die($db->error);
        }*/
-$pagi = new Pagination(176,190,'ShowRoomController','page');
+$db = new CRUD('materials'); echo'<pre>';
+
+$db->GetInfo(array('title','autor'),'OR','=','all','Гофман');
+
 include 'views/contact/index.php';
     }
 }
