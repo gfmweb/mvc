@@ -5,7 +5,7 @@
  */
 
 namespace controllers;
-use controllers\Magic;
+use core\Magic;
 
 class MultiController extends Magic
 {

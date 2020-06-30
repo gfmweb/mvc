@@ -4,6 +4,7 @@
 namespace controllers;
 
 use models\ShowRoomModel;
+use core\Magic;
 
 class ShowRoomController extends Magic
 {
@@ -17,6 +18,7 @@ class ShowRoomController extends Magic
         }
         else // Если пришел Ajax запрос
         {
+
             $model->index($req_method,$params);
             $ansver=array('content'=>$model->content_result.'</div>'.$model->pagination->pagi);
             echo json_encode($ansver);

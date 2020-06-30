@@ -4,7 +4,7 @@
  *
  */
 
-namespace models;
+namespace core;
 
 
 class Mail

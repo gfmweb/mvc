@@ -5,7 +5,7 @@
  *
  */
 
-namespace models;
+namespace core;
 
 
 class ValidateAccess

@@ -7,7 +7,8 @@
 
 namespace models;
 
-use models\Navbar;
+use widgets\Navbar;
+use core\Model;
 
 class IndexModel Extends Model
 {

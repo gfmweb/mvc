@@ -6,7 +6,7 @@
 namespace controllers;
 
 
-use models\ValidateAccess;
+use core\ValidateAccess;
 use models\UsersAtions;
 
 final class DverController

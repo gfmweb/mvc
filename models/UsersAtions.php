@@ -4,8 +4,8 @@
 namespace models;
 
 use config\Db;
-use models\Mail;
-use models\SimpleImage;
+use core\Mail;
+use core\SimpleImage;
 class UsersAtions
 {
 

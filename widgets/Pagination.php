@@ -1,7 +1,7 @@
 <?php
 
 
-namespace models;
+namespace widgets;
 
 
 class Pagination

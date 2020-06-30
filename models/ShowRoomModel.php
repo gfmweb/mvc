@@ -3,8 +3,12 @@
 
 namespace models;
 
-use config\Db;
-use models\Pagination;
+
+use widgets\Pagination;
+use widgets\Navbar;
+use core\Model;
+use core\CRUD;
+
 
 class ShowRoomModel extends Model
 {
@@ -19,32 +23,28 @@ class ShowRoomModel extends Model
 
     public function index($req_method,$params)
     {
+
             $maxcontent=include 'config/mat_on_page.php';
             $this->content_result.='
                 <div class="container mt-5 wow zoomIn">
                     <div class="row mt-5">'; // Начало контентной части
 
-            $db= Db::init();
-            $db->query("SELECT * FROM `materials`");
-            $RowsCount= $db->affected_rows;
-
-            $TotalPages=ceil($RowsCount/$maxcontent); // Делим количество строк на количество материалов на странице
+            $containerIfno= new CRUD('materials');
+            $TotalPages=ceil($containerIfno->TotalRows/$maxcontent); // Делим количество строк на количество материалов на странице
 
                 if(!isset($params)) {
-                            $req = $db->query("SELECT * FROM `materials` LIMIT {$maxcontent}"); //Запрашиваем все данные из таблицы
-                            while ($row = $req->fetch_assoc()) {
-                                $data[] = $row; // Собираем массив данных
-                            }
 
-                             $this->pagination= new Pagination(1,$TotalPages,'ShowRoomController','page');
+                    $containerIfno->GetInfo(null,null,null,null,$maxcontent,null); //Запрашиваем все данные из таблицы
+                    $this->pagination= new Pagination(1,$TotalPages,'ShowRoomController','page');
+                    foreach ($containerIfno->Resulting as $el){
+                        $this->content_result.=$el['content'];
+                    }
 
-                            for($i=0, $iMax=count($data); $i<$iMax; $i++)
-                            {
-                                $this->content_result.=$data[$i]['content'];
-                            }
                 }
+
                 else // Если совершено действие в пагинации или пришел Ajax Запрос
                 {
+
                     if (($req_method === 'AjaxSearch')) // Если кто-то хочет поискать в Аяксе
                     {
                         if ($params[0]['val'] === 'clear') // Если пришла команда сбросить все фильтры повторяем всё что было на начальной странице
@@ -53,80 +53,68 @@ class ShowRoomModel extends Model
                             {
                                 unset($_SESSION['search']); // Уничтожаем фильтр
                             }
-                            $req = $db->query("SELECT * FROM `materials` LIMIT {$maxcontent}"); //Запрашиваем все данные из таблицы
-                            while ($row = $req->fetch_assoc()) {
-                                $data[] = $row; // Собираем массив данных
-                            }
-
-                            $this->pagination= new Pagination(1,$TotalPages,'ShowRoomController','page');
-
-                            for($i=0, $iMax=count($data); $i<$iMax; $i++)
-                            {
-                                $this->content_result.=$data[$i]['content'];
+                            $containerIfno->GetInfo(null,null,null,null, $maxcontent,null); //Запрашиваем все данные из таблицы
+                            $this->pagination= new Pagination(1,$TotalPages,'ShowRoomController','page'); // Создаем пагинацию
+                            foreach ($containerIfno->Resulting as $el){
+                                $this->content_result.=$el['content'];
                             }
 
                             return $this;
-                        } else // Устанавливаем фильтр поиска
+                        }
+                        else // Устанавливаем фильтр поиска
                         {
                             $_SESSION['search'] = $params[0]['val'];
                             $this->SearchPlaysholder = $_SESSION['search'];
 
-                            $db->query("SELECT * FROM `materials` WHERE `title` LIKE '%{$db->real_escape_string($_SESSION['search'])}%' OR `description` LIKE '%{$db->real_escape_string($_SESSION['search'])}%' OR `autor` LIKE '%{$db->real_escape_string($_SESSION['search'])}%' LIMIT {$maxcontent}");
-                            $RowsCountAjax = $db->affected_rows;
-                            $LastPage = $RowsCountAjax % $maxcontent;
-                            $TotalPages = intdiv($RowsCountAjax, $maxcontent); // Делим количество строк на количество материалов на странице
+                            $containerIfno->GetInfo(array('title','description','autor'),'OR','LIKE',$_SESSION['search'] ,$maxcontent,0);
 
-                            $req = $db->query("SELECT * FROM `materials` WHERE `title` LIKE '%{$db->real_escape_string($_SESSION['search'])}%' OR `description` LIKE '%{$db->real_escape_string($_SESSION['search'])}%' OR `autor` LIKE '%{$db->real_escape_string($_SESSION['search'])}%' LIMIT {$maxcontent}"); //Запрашиваем все данные из таблицы
-                            while ($row = $req->fetch_assoc()) {
-                                $data[] = $row; // Собираем массив данных
+                            $TotalPages = intdiv($containerIfno->CurentRows, $maxcontent); // Делим количество строк на количество материалов на странице
+                            if($containerIfno->CurentRows > 0){
+                                foreach ($containerIfno->Resulting as $el){
+                                    $this->content_result.=$el['content'];
+                                }
                             }
-                            for ($cont = 0, $contMax = count($data); $cont < $contMax; $cont++) {
-                                $this->content_result .= $data[$cont]['content'];
+                            else{
+                                $this->content_result.='<div class="mt-5 text-center"><h2>Ничего не найдено</h2></div>';
                             }
                             $this->pagination= new Pagination(1,$TotalPages,'ShowRoomController','page');
                         }
                         return $this;
-                    } else // Действия с Пагинацией
+                    }
+                    else // Действия с Пагинацией
                     {
-                        /*TODO
-                               Проверяем был ли установлен параметр ФИЛЬТР поиска по БД
-                               Выполняем сбор данных так-же как и при первом заходе на этот раздел
-                               Записываем в строку поиска Данные фильтра (Если таковой был)
-                               Работаем без JSON
-                          */
+
                         if(isset($_SESSION['search']))
                         {
                             $this->SearchPlaysholder = $_SESSION['search'];
                             $offset=($params[0]['val']-1)*$maxcontent;
-                            $db->query("SELECT * FROM `materials` WHERE `title` LIKE '%{$db->real_escape_string($_SESSION['search'])}%' OR `description` LIKE '%{$db->real_escape_string($_SESSION['search'])}%' OR `autor` LIKE '%{$db->real_escape_string($_SESSION['search'])}%' LIMIT {$maxcontent} OFFSET {$offset}");
-                            $RowsCountAjax = $db->affected_rows;
+                            $containerIfno->GetInfo(array('title','description','autor'),'OR','LIKE',$this->SearchPlaysholder,$maxcontent,$offset);
+                            $RowsCountAjax = $containerIfno->CurentRows;
                             $TotalPages = intdiv($RowsCountAjax, $maxcontent); // Делим количество строк на количество материалов на странице
-
-                            $req = $db->query("SELECT * FROM `materials` WHERE `title` LIKE '%{$db->real_escape_string($_SESSION['search'])}%' OR `description` LIKE '%{$db->real_escape_string($_SESSION['search'])}%' OR `autor` LIKE '%{$db->real_escape_string($_SESSION['search'])}%' LIMIT {$maxcontent} OFFSET {$offset}"); //Запрашиваем все данные из таблицы
-                            while ($row = $req->fetch_assoc()) {
-                                $data[] = $row; // Собираем массив данных
+                            if($containerIfno->CurentRows > 0){
+                                foreach ($containerIfno->Resulting as $el){
+                                    $this->content_result.=$el['content'];
+                                }
                             }
-                            for ($cont = 0, $contMax = count($data); $cont < $contMax; $cont++) {
-                                $this->content_result .= $data[$cont]['content'];
+                            else{
+                                $this->content_result.='<div class="mt-5 text-center"><h2>Ничего не найдено</h2></div>';
                             }
                             $this->pagination= new Pagination($params[0]['val'],$TotalPages,'ShowRoomController','page');
 
                         }
                         else{
                             $offset=($params[0]['val']-1)*$maxcontent;
-                            $req = $db->query("SELECT * FROM `materials` LIMIT {$maxcontent} OFFSET {$offset}"); //Запрашиваем все данные из таблицы
-
-                            while ($row = $req->fetch_assoc()) {
-                                $data[] = $row; // Собираем массив данных
+                            $containerIfno->GetInfo(null,null,null, null,$maxcontent,$offset); //Запрашиваем все данные из таблицы
+                            if($containerIfno->CurentRows > 0){
+                                foreach ($containerIfno->Resulting as $el){
+                                    $this->content_result.=$el['content'];
+                                }
                             }
-
-
-                            $this->pagination= new Pagination($params[0]['val'],$TotalPages,'ShowRoomController','page');
-
-                            for($i=0, $iMax=count($data); $i<$iMax; $i++)
-                            {
-                                $this->content_result.=$data[$i]['content'];
+                            else{
+                                $this->content_result.='Ничего не найдено';
                             }
+                            $this->pagination= new Pagination($params[0]['val'],$TotalPages,'ShowRoomController','page'); // Создаем пагинацию
+
                         }
 
                     }

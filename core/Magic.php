@@ -4,7 +4,7 @@
  *  Абстрактный класс Магического контроллера
  */
 
-namespace controllers;
+namespace core;
 
 
 abstract class Magic

@@ -1,7 +1,7 @@
 <?php
 
 
-namespace models;
+namespace core;
 
 
 class Model
@@ -12,7 +12,7 @@ class Model
 
     public function __construct()
     {
-        $this->pages=include 'config/nav_pages.php';// Сбор данных из конфигурации
+        $this->pages= include 'config/nav_pages.php';// Сбор данных из конфигурации
         if(isset($_SESSION['alert'])) // Проверяем есть ли Алерт с ошибкой
         {
             $this->alert="<div class=\"alert alert-danger alert-dismissible fade show\" role=\"alert\">

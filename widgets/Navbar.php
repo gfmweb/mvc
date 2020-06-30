@@ -1,7 +1,7 @@
 <?php
 
 
-namespace models;
+namespace widgets;
 
 
 class Navbar
@@ -62,12 +62,12 @@ class Navbar
             }
         }
 
-        $nav='<nav class="navbar fixed-top navbar-expand-lg navbar-dark scrolling-navbar">
+        $nav= '<nav class="navbar fixed-top navbar-expand-lg navbar-dark scrolling-navbar">
     <div class="container">
 
         <!-- Brand -->
         <a class="navbar-brand" href="/" >
-            <strong>'.APP_NAME.'</strong>
+            <strong>' .APP_NAME.'</strong>
         </a>
 
         <!-- Collapse -->
@@ -163,12 +163,12 @@ class Navbar
                 </form>
     
     ';
-        $nav='<nav class="navbar fixed-top navbar-expand-lg navbar-dark scrolling-navbar">
+        $nav= '<nav class="navbar fixed-top navbar-expand-lg navbar-dark scrolling-navbar">
     <div class="container">
 
         <!-- Brand -->
         <a class="navbar-brand" href="/" >
-            <strong>'.APP_NAME.'</strong>
+            <strong>' .APP_NAME.'</strong>
         </a>
 
         <!-- Collapse -->
