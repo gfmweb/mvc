@@ -1,8 +1,13 @@
 <?php
+/**
+ *  Страницы навигации
+ *  Массив 1. Отображаемое имя 2. Ссылка на контроллер
+ *
+ */
 return array(
 
-    'Главная'=>'/IndexController',
-    'Работы'=>'/ShowRoomController',
-    'Контакты'=>'/ContactsController'
+    'Главная'=>'/Index',
+    'Работы'=>'/ShowRoom',
+    'Контакты'=>'/Contacts'
 
 );

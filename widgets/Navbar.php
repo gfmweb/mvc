@@ -38,7 +38,7 @@ class Navbar
         </a>
         <div class="dropdown-menu dropdown-menu-lg-right dropdown-default"
           aria-labelledby="navbarDropdownMenuLink-333">
-          <a class="dropdown-item" href="/IndexController/lkLogout">Выйти ('.$_SESSION['User'].')</a>
+          <a class="dropdown-item" href="/Index/lkLogout">Выйти ('.$_SESSION['User'].')</a>
         </div>
       </li>
     </ul>';
@@ -131,7 +131,7 @@ class Navbar
         </a>
         <div class="dropdown-menu dropdown-menu-lg-right dropdown-default"
           aria-labelledby="navbarDropdownMenuLink-333">
-          <a class="dropdown-item" href="/IndexController/lkLogout">Выйти ('.$_SESSION['User'].')</a>
+          <a class="dropdown-item" href="/Index/lkLogout">Выйти ('.$_SESSION['User'].')</a>
         </div>
       </li>
     </ul>';

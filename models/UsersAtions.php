@@ -50,7 +50,7 @@ class UsersAtions
                                    $name=$user['name'];
                                    $mail_send = new Mail($_SERVER['SERVER_NAME']); // Создаём экземпляр класса
                                    $mail_send->setFromName("Администрация сайта"); // Устанавливаем имя в обратном адресе
-                                   $mail_send->send($mail, "Подтверждение почтового ящика. Повторное письмо", "<h3>Здравствуйте ".$name."!</h3><p>Вы получили это письмо для подтверждения регистрации на сайте <strong>".$_SERVER['SERVER_NAME']."</strong> </p><p>Для активации Вашего аккаунта пройдите по ссылке: <a href='https://".$_SERVER['SERVER_NAME']."/DverController/activate?login=".$pass."&mail=".$mail."'>https://".$_SERVER['SERVER_NAME']."/DverController/activate?login=".$pass."&mail=".$mail."</a></p>");
+                                   $mail_send->send($mail, "Подтверждение почтового ящика. Повторное письмо", "<h3>Здравствуйте ".$name."!</h3><p>Вы получили это письмо для подтверждения регистрации на сайте <strong>".$_SERVER['SERVER_NAME']."</strong> </p><p>Для активации Вашего аккаунта пройдите по ссылке: <a href='https://".$_SERVER['SERVER_NAME']."/Dver/activate?login=".$pass."&mail=".$mail."'>https://".$_SERVER['SERVER_NAME']."/Dver/activate?login=".$pass."&mail=".$mail."</a></p>");
                                    return true;
                                    break; // возвращаем ТРУ
                                }
@@ -101,7 +101,7 @@ class UsersAtions
             $db->query("INSERT INTO `users` SET `email` = '".$mail."', `password` = '".$pass."', `name` = '".$user."' ");// Добавляем в БД
             $mail_send = new Mail($_SERVER['SERVER_NAME']); // Создаём экземпляр класса
             $mail_send->setFromName("Администрация сайта"); // Устанавливаем имя в обратном адресе
-            $mail_send->send($mail, "Подтверждение почтового ящика", "<h3>Здравствуйте ".$user."!</h3><p>Вы получили это письмо для подтверждения регистрации на сайте <strong>".$_SERVER['SERVER_NAME']."</strong> </p><p>Для активации Вашего аккаунта пройдите по ссылке: <a href='https://".$_SERVER['SERVER_NAME']."/DverController/activate?login=".$pass."&mail=".$mail."'>https://".$_SERVER['SERVER_NAME']."/DverController/activate?login=".$pass."&mail=".$mail."</a></p>");
+            $mail_send->send($mail, "Подтверждение почтового ящика", "<h3>Здравствуйте ".$user."!</h3><p>Вы получили это письмо для подтверждения регистрации на сайте <strong>".$_SERVER['SERVER_NAME']."</strong> </p><p>Для активации Вашего аккаунта пройдите по ссылке: <a href='https://".$_SERVER['SERVER_NAME']."/Dver/activate?login=".$pass."&mail=".$mail."'>https://".$_SERVER['SERVER_NAME']."/Dver/activate?login=".$pass."&mail=".$mail."</a></p>");
         }
 
     }
@@ -196,7 +196,7 @@ class UsersAtions
                     $db->query("UPDATE `users` SET `email` = '".$db->escape_string($Email)."', `confirm`=FALSE WHERE `id` = '".$Target."'");
                     $mail_send = new Mail($_SERVER['SERVER_NAME']); // Создаём экземпляр класса
                     $mail_send->setFromName("Администрация сайта"); // Устанавливаем имя в обратном адресе
-                    $mail_send->send($Email, "Подтверждение нового почтового ящика", "<h3>Здравствуйте ".$User."!</h3><p>Вы получили это письмо для подтверждения изменения почтового ящика  на сайте <strong>".$_SERVER['SERVER_NAME']."</strong> </p><p>Для активации Вашего аккаунта пройдите по ссылке: <a href='https://".$_SERVER['SERVER_NAME']."/DverController/activate?login=".$curent_user['password']."&mail=".$Email."'>https://".$_SERVER['SERVER_NAME']."/DverController/activate?login=".$curent_user['password']."&mail=".$Email."</a></p>");
+                    $mail_send->send($Email, "Подтверждение нового почтового ящика", "<h3>Здравствуйте ".$User."!</h3><p>Вы получили это письмо для подтверждения изменения почтового ящика  на сайте <strong>".$_SERVER['SERVER_NAME']."</strong> </p><p>Для активации Вашего аккаунта пройдите по ссылке: <a href='https://".$_SERVER['SERVER_NAME']."/Dver/activate?login=".$curent_user['password']."&mail=".$Email."'>https://".$_SERVER['SERVER_NAME']."/Dver/activate?login=".$curent_user['password']."&mail=".$Email."</a></p>");
                     $result .= '_email_changed_';
 
                 }
@@ -262,7 +262,7 @@ class UsersAtions
     {
         if($params[0]['val']==='Регистрация')
         {
-            $result=array('act'=>'/DverController/register',
+            $result=array('act'=>'/Dver/register',
                           'name'=>'Регистрация',
                           'form'=>'            <div class="md-form mb-5">
                                                     <i class="fas fa-user  prefix grey-text"></i>
@@ -288,7 +288,7 @@ class UsersAtions
         }
         elseif($params[0]['val']==='Восстановление пароля')
         {
-            $result=array('act'=>'/DverController/remind',
+            $result=array('act'=>'/Dver/remind',
                 'name'=>'Восстановление пароля',
                 'form'=>'<div class="md-form mb-5">
                                             <div class="md-form mb-2">
@@ -308,7 +308,7 @@ class UsersAtions
         elseif($params[0]['val']==='Вход')
         {
             $result=array(
-                          'act'=>'/DverController/login',
+                          'act'=>'/Dver/login',
                           'name'=>'Вход',
                           'form'=>'<div class="md-form mb-5">
                                                     <i class="fas fa-envelope prefix grey-text"></i>

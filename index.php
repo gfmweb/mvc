@@ -10,6 +10,7 @@ use routing\RouteController;
 // Автозагрузчик классов
     spl_autoload_register(function($className) {
         $pieces = explode("\\",$className);
+
         if(file_exists($pieces[0]."/".$pieces[1] .'.php')){ // проверка существования контроллера
             require_once($pieces[0]."/".$pieces[1] .'.php');
         }
@@ -28,7 +29,7 @@ use routing\RouteController;
     $implement_controller = new $route->controller; // Вызов контроллера
     // Проверка на принадлежностть класса вызываемого контроллера к классу унаследованного от Magic
     $check_magic=get_parent_class($implement_controller); // Запрос родителя
-    if($check_magic=="core\Magic"){ // Если контроллер является наследником Магического класса
+    if($check_magic==="core\Magic"){ // Если контроллер является наследником Магического класса
         $implement_controller->index($route->method,$route->requests); // Передаем ему параметром запрашиваемй метод и запрос на его метод Index
     }
     else{

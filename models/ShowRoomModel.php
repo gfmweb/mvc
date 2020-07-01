@@ -23,7 +23,6 @@ class ShowRoomModel extends Model
 
     public function index($req_method,$params)
     {
-
             $maxcontent=include 'config/mat_on_page.php';
             $this->content_result.='
                 <div class="container mt-5 wow zoomIn">
@@ -35,7 +34,7 @@ class ShowRoomModel extends Model
                 if(!isset($params)) {
 
                     $containerIfno->GetInfo(null,null,null,null,$maxcontent,null); //Запрашиваем все данные из таблицы
-                    $this->pagination= new Pagination(1,$TotalPages,'ShowRoomController','page');
+                    $this->pagination= new Pagination(1,$TotalPages,'ShowRoom','page');
                     foreach ($containerIfno->Resulting as $el){
                         $this->content_result.=$el['content'];
                     }
@@ -54,7 +53,7 @@ class ShowRoomModel extends Model
                                 unset($_SESSION['search']); // Уничтожаем фильтр
                             }
                             $containerIfno->GetInfo(null,null,null,null, $maxcontent,null); //Запрашиваем все данные из таблицы
-                            $this->pagination= new Pagination(1,$TotalPages,'ShowRoomController','page'); // Создаем пагинацию
+                            $this->pagination= new Pagination(1,$TotalPages,'ShowRoom','page'); // Создаем пагинацию
                             foreach ($containerIfno->Resulting as $el){
                                 $this->content_result.=$el['content'];
                             }
@@ -77,7 +76,7 @@ class ShowRoomModel extends Model
                             else{
                                 $this->content_result.='<div class="mt-5 text-center"><h2>Ничего не найдено</h2></div>';
                             }
-                            $this->pagination= new Pagination(1,$TotalPages,'ShowRoomController','page');
+                            $this->pagination= new Pagination(1,$TotalPages,'ShowRoom','page');
                         }
                         return $this;
                     }
@@ -99,7 +98,7 @@ class ShowRoomModel extends Model
                             else{
                                 $this->content_result.='<div class="mt-5 text-center"><h2>Ничего не найдено</h2></div>';
                             }
-                            $this->pagination= new Pagination($params[0]['val'],$TotalPages,'ShowRoomController','page');
+                            $this->pagination= new Pagination($params[0]['val'],$TotalPages,'ShowRoom','page');
 
                         }
                         else{
@@ -113,7 +112,7 @@ class ShowRoomModel extends Model
                             else{
                                 $this->content_result.='Ничего не найдено';
                             }
-                            $this->pagination= new Pagination($params[0]['val'],$TotalPages,'ShowRoomController','page'); // Создаем пагинацию
+                            $this->pagination= new Pagination($params[0]['val'],$TotalPages,'ShowRoom','page'); // Создаем пагинацию
 
                         }
 

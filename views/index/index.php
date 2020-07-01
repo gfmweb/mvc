@@ -69,21 +69,18 @@ include('template/header_str.php');
                     <!-- Content -->
                     <div class="text-center white-text mx-5 wow fadeIn">
                         <h1 class="mb-4">
-                            <strong>Learn Bootstrap 4 with MDB</strong>
+                            <strong>MVC</strong>
                         </h1>
 
                         <p>
-                            <strong>Best & free guide of responsive web design</strong>
+                            <strong>Заготовка MVC + MDB</strong>
                         </p>
 
                         <p class="mb-4 d-none d-md-block">
-                            <strong>The most comprehensive tutorial for the Bootstrap 4. Loved by over 500 000 users. Video and written versions
-                                available. Create your own, stunning website.</strong>
+                            <strong>Реализованы основные задачи CRUD + Модуль регистрации / авторизации с подтверждением по Email</strong>
                         </p>
 
-                        <a target="_blank" href="https://mdbootstrap.com/education/bootstrap/" class="btn btn-outline-white btn-lg">Start free tutorial
-                            <i class="fas fa-graduation-cap ml-2"></i>
-                        </a>
+
                     </div>
                     <!-- Content -->
 
@@ -104,21 +101,18 @@ include('template/header_str.php');
                     <!-- Content -->
                     <div class="text-center white-text mx-5 wow fadeIn">
                         <h1 class="mb-4">
-                            <strong>Learn Bootstrap 4 with MDB</strong>
+                            <strong>MVC</strong>
                         </h1>
 
                         <p>
-                            <strong>Best & free guide of responsive web design</strong>
+                            <strong>Основные особенности</strong>
                         </p>
 
                         <p class="mb-4 d-none d-md-block">
-                            <strong>The most comprehensive tutorial for the Bootstrap 4. Loved by over 500 000 users. Video and written versions
-                                available. Create your own, stunning website.</strong>
+                            <strong>Добавлен класс Magic реализующий мульти-метод </strong>
                         </p>
 
-                        <a target="_blank" href="https://mdbootstrap.com/education/bootstrap/" class="btn btn-outline-white btn-lg">Start free tutorial
-                            <i class="fas fa-graduation-cap ml-2"></i>
-                        </a>
+
                     </div>
                     <!-- Content -->
 
@@ -144,21 +138,18 @@ include('template/header_str.php');
                     <!-- Content -->
                     <div class="text-center white-text mx-5 wow fadeIn">
                         <h1 class="mb-4">
-                            <strong>Learn Bootstrap 4 with MDB</strong>
+                            <strong>MVC</strong>
                         </h1>
 
                         <p>
-                            <strong>Best & free guide of responsive web design</strong>
+                            <strong>Виджеты</strong>
                         </p>
 
                         <p class="mb-4 d-none d-md-block">
-                            <strong>The most comprehensive tutorial for the Bootstrap 4. Loved by over 500 000 users. Video and written versions
-                                available. Create your own, stunning website.</strong>
+                            <strong>Блоки NavBar и Пагинация вынесены в виджеты</strong>
                         </p>
 
-                        <a target="_blank" href="https://mdbootstrap.com/education/bootstrap/" class="btn btn-outline-white btn-lg">Start free tutorial
-                            <i class="fas fa-graduation-cap ml-2"></i>
-                        </a>
+
                     </div>
                     <!-- Content -->
 
@@ -208,28 +199,20 @@ include('template/header_str.php');
                 <div class="col-md-6 mb-4">
 
                     <!-- Main heading -->
-                    <h3 class="h3 mb-3">Material Design for Bootstrap</h3>
-                    <p>This template is created with Material Design for Bootstrap (
-                        <strong>MDB</strong> ) framework.</p>
-                    <p>Read details below to learn more about MDB.</p>
+                    <h3 class="h3 mb-3">Bootstrap Материал Дизайн</h3>
+                    <p>За основу взят Front - FrameWork
+                        <strong>MDB</strong> </p>
+                    <p><small>include</small> JQuery</p>
                     <!-- Main heading -->
 
                     <hr>
 
                     <p>
-                        <strong>400+</strong> material UI elements,
-                        <strong>600+</strong> material icons,
-                        <strong>74</strong> CSS animations, SASS files, templates, tutorials and many more.
-                        <strong>Free for personal and commercial use.</strong>
+                        Низкий порог вхождения даст возможность даже новичкам легко изменить всю заготовку  под любые цели
                     </p>
 
                     <!-- CTA -->
-                    <a target="_blank" href="https://mdbootstrap.com/docs/jquery/getting-started/download/" class="btn btn-grey btn-md">Download
-                        <i class="fas fa-download ml-1"></i>
-                    </a>
-                    <a target="_blank" href="https://mdbootstrap.com/docs/jquery/components/" class="btn btn-grey btn-md">Live demo
-                        <i class="far fa-image ml-1"></i>
-                    </a>
+
 
                 </div>
                 <!--Grid column-->
@@ -245,7 +228,7 @@ include('template/header_str.php');
         <!--Section: Main features & Quick Start-->
         <section>
 
-            <h3 class="h3 text-center mb-5">About MDB</h3>
+            <h3 class="h3 text-center mb-5">Основные особенности</h3>
 
             <!--Grid row-->
             <div class="row wow fadeIn">
@@ -259,8 +242,8 @@ include('template/header_str.php');
                             <i class="fas fa-code fa-2x indigo-text"></i>
                         </div>
                         <div class="col-10">
-                            <h5 class="feature-title">Bootstrap 4</h5>
-                            <p class="grey-text">Thanks to MDB you can take advantage of all feature of newest Bootstrap 4.</p>
+                            <h5 class="feature-title">Гибкость</h5>
+                            <p class="grey-text">Все настройки вынесены в отдельные config файлы</p>
                         </div>
                     </div>
                     <!--/First row-->
@@ -273,9 +256,8 @@ include('template/header_str.php');
                             <i class="fas fa-book fa-2x blue-text"></i>
                         </div>
                         <div class="col-10">
-                            <h5 class="feature-title">Detailed documentation</h5>
-                            <p class="grey-text">We give you detailed user-friendly documentation at your disposal. It will help you to implement your ideas
-                                easily.
+                            <h5 class="feature-title">Комметированный код</h5>
+                            <p class="grey-text">Весь код PHP снабжен построчным комментарием
                             </p>
                         </div>
                     </div>
@@ -289,9 +271,8 @@ include('template/header_str.php');
                             <i class="fas fa-graduation-cap fa-2x cyan-text"></i>
                         </div>
                         <div class="col-10">
-                            <h5 class="feature-title">Lots of tutorials</h5>
-                            <p class="grey-text">We care about the development of our users. We have prepared numerous tutorials, which allow you to learn
-                                how to use MDB as well as other technologies.</p>
+                            <h5 class="feature-title">Частые UpGrade</h5>
+                            <p class="grey-text">Постоянные работы по улучшению уже имеющегося функцинала + добавление новых возможностей </p>
                         </div>
                     </div>
                     <!--/Third row-->
@@ -302,7 +283,7 @@ include('template/header_str.php');
                 <!--Grid column-->
                 <div class="col-lg-6 col-md-12">
 
-                    <p class="h5 text-center mb-4">Watch our "5 min Quick Start" tutorial</p>
+                    <p class="h5 text-center mb-4">Краткий обзор </p>
                     <div class="embed-responsive embed-responsive-16by9">
                         <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/cXTThxoywNQ" allowfullscreen></iframe>
                     </div>
@@ -320,7 +301,7 @@ include('template/header_str.php');
         <!--Section: Not enough-->
         <section>
 
-            <h2 class="my-5 h3 text-center">Not enough?</h2>
+            <h2 class="my-5 h3 text-center">Рассказать подробнее?</h2>
 
             <!--First row-->
             <div class="row features-small mb-5 mt-3 wow fadeIn">
@@ -333,8 +314,8 @@ include('template/header_str.php');
                             <i class="fas fa-check-circle fa-2x indigo-text"></i>
                         </div>
                         <div class="col-10">
-                            <h6 class="feature-title">Free for personal and commercial use</h6>
-                            <p class="grey-text">Our license is user-friendly. Feel free to use MDB for both private as well as commercial projects.
+                            <h6 class="feature-title">Защищенность</h6>
+                            <p class="grey-text">Контроль над всеми входящими данными
                             </p>
                             <div style="height:15px"></div>
                         </div>
@@ -347,8 +328,8 @@ include('template/header_str.php');
                             <i class="fas fa-check-circle fa-2x indigo-text"></i>
                         </div>
                         <div class="col-10">
-                            <h6 class="feature-title">400+ UI elements</h6>
-                            <p class="grey-text">An impressive collection of flexible components allows you to develop any project.
+                            <h6 class="feature-title">Стабильность</h6>
+                            <p class="grey-text">Анализ клиента и его действий предотвращает попытки обраиться к основным функциям через скрипты
                             </p>
                             <div style="height:15px"></div>
                         </div>
@@ -361,8 +342,8 @@ include('template/header_str.php');
                             <i class="fas fa-check-circle fa-2x indigo-text"></i>
                         </div>
                         <div class="col-10">
-                            <h6 class="feature-title">600+ icons</h6>
-                            <p class="grey-text">Hundreds of useful, scalable, vector icons at your disposal.</p>
+                            <h6 class="feature-title">Скорость</h6>
+                            <p class="grey-text">Запросы к БД оптимизированы</p>
                             <div style="height:15px"></div>
                         </div>
                     </div>
@@ -374,9 +355,8 @@ include('template/header_str.php');
                             <i class="fas fa-check-circle fa-2x indigo-text"></i>
                         </div>
                         <div class="col-10">
-                            <h6 class="feature-title">Fully responsive</h6>
-                            <p class="grey-text">It doesn't matter whether your project will be displayed on desktop, laptop, tablet or mobile phone. MDB
-                                looks great on each screen.</p>
+                            <h6 class="feature-title">Легкость</h6>
+                            <p class="grey-text">Все CSS и JS минимализированы</p>
                             <div style="height:15px"></div>
                         </div>
                     </div>
@@ -398,8 +378,8 @@ include('template/header_str.php');
                             <i class="fas fa-check-circle fa-2x indigo-text"></i>
                         </div>
                         <div class="col-10">
-                            <h6 class="feature-title">70+ CSS animations</h6>
-                            <p class="grey-text">Neat and easy to use animations, which will increase the interactivity of your project and delight your visitors.
+                            <h6 class="feature-title">Корректность отображения</h6>
+                            <p class="grey-text">Шаблоны всегда будут корректно отбражаться на любых устройствах
                             </p>
                             <div style="height:15px"></div>
                         </div>
@@ -412,8 +392,8 @@ include('template/header_str.php');
                             <i class="fas fa-check-circle fa-2x indigo-text"></i>
                         </div>
                         <div class="col-10">
-                            <h6 class="feature-title">Plenty of useful templates</h6>
-                            <p class="grey-text">Need inspiration? Use one of our predefined templates for free.</p>
+                            <h6 class="feature-title">Современный дизайн</h6>
+                            <p class="grey-text">Использование MDB позволяет создавать сайты современного оформления</p>
                             <div style="height:15px"></div>
                         </div>
                     </div>
@@ -425,8 +405,8 @@ include('template/header_str.php');
                             <i class="fas fa-check-circle fa-2x indigo-text"></i>
                         </div>
                         <div class="col-10">
-                            <h6 class="feature-title">Easy installation</h6>
-                            <p class="grey-text">5 minutes, a few clicks and... done. You will be surprised at how easy it is.
+                            <h6 class="feature-title">Легкость развертывания</h6>
+                            <p class="grey-text">Миграции SQL вклюены в установку
                             </p>
                             <div style="height:15px"></div>
                         </div>
@@ -439,9 +419,8 @@ include('template/header_str.php');
                             <i class="fas fa-check-circle fa-2x indigo-text"></i>
                         </div>
                         <div class="col-10">
-                            <h6 class="feature-title">Easy to use and customize</h6>
-                            <p class="grey-text">Using MDB is straightforward and pleasant. Components flexibility allows you deep customization. You will
-                                easily adjust each component to suit your needs.</p>
+                            <h6 class="feature-title">"Из коробки"</h6>
+                            <p class="grey-text">После установки проект уже готов к работе</p>
                             <div style="height:15px"></div>
                         </div>
                     </div>
@@ -460,7 +439,7 @@ include('template/header_str.php');
         <!--Section: More-->
         <section>
 
-            <h2 class="my-5 h3 text-center">...and even more</h2>
+            <h2 class="my-5 h3 text-center">...и еще чуточку</h2>
 
             <!--First row-->
             <div class="row features-small mt-5 wow fadeIn">
@@ -473,8 +452,8 @@ include('template/header_str.php');
                             <i class="fab fa-firefox fa-2x mb-1 indigo-text" aria-hidden="true"></i>
                         </div>
                         <div class="col-10 mb-2 pl-3">
-                            <h5 class="feature-title font-bold mb-1">Cross-browser compatibility</h5>
-                            <p class="grey-text mt-2">Chrome, Firefox, IE, Safari, Opera, Microsoft Edge - MDB loves all browsers; all browsers love MDB.
+                            <h5 class="feature-title font-bold mb-1">Кросс-браузерность</h5>
+                            <p class="grey-text mt-2">Chrome, Firefox, IE, Safari, Opera, Microsoft Edge - MDB Одинаково хорошо работает со всеми
                             </p>
                         </div>
                     </div>
@@ -490,8 +469,8 @@ include('template/header_str.php');
                             <i class="fas fa-level-up-alt fa-2x mb-1 indigo-text" aria-hidden="true"></i>
                         </div>
                         <div class="col-10 mb-2">
-                            <h5 class="feature-title font-bold mb-1">Frequent updates</h5>
-                            <p class="grey-text mt-2">MDB becomes better every month. We love the project and enhance as much as possible.
+                            <h5 class="feature-title font-bold mb-1">Коммулятивность апдейтов</h5>
+                            <p class="grey-text mt-2">В каждый апдейт включена возможность обновления более ранней версии
                             </p>
                         </div>
                     </div>
@@ -507,8 +486,8 @@ include('template/header_str.php');
                             <i class="fas fa-comments fa-2x mb-1 indigo-text" aria-hidden="true"></i>
                         </div>
                         <div class="col-10 mb-2">
-                            <h5 class="feature-title font-bold mb-1">Active community</h5>
-                            <p class="grey-text mt-2">Our society grows day by day. Visit our forum and check how it is to be a part of our family.
+                            <h5 class="feature-title font-bold mb-1">Сообщество</h5>
+                            <p class="grey-text mt-2">Большинство вопросов по проекту активно обсуждаются в  социальных сетях
                             </p>
                         </div>
                     </div>
@@ -521,13 +500,11 @@ include('template/header_str.php');
                     <!--Grid row-->
                     <div class="row">
                         <div class="col-2">
-                            <i class="fas fa-code fa-2x mb-1 indigo-text" aria-hidden="true"></i>
+                            <i class="fas fa-cubes fa-2x mb-1 indigo-text" aria-hidden="true"></i>
                         </div>
                         <div class="col-10 mb-2">
-                            <h5 class="feature-title font-bold mb-1">jQuery 3.x</h5>
-                            <p class="grey-text mt-2">MDB is integrated with newest jQuery. Therefore you can use all the latest features which come along with
-                                it.
-                            </p>
+                            <h5 class="feature-title font-bold mb-1">Модульность</h5>
+                            <p class="grey-text mt-2">Дополнительные модули можно подключать отдельно не затрагивая основной каркас приложения.</p>
                         </div>
                     </div>
                     <!--/Grid row-->
@@ -538,75 +515,7 @@ include('template/header_str.php');
             <!--/First row-->
 
             <!--Second row-->
-            <div class="row features-small mt-4 wow fadeIn">
 
-                <!--Grid column-->
-                <div class="col-xl-3 col-lg-6">
-                    <!--Grid row-->
-                    <div class="row">
-                        <div class="col-2">
-                            <i class="fas fa-cubes fa-2x mb-1 indigo-text" aria-hidden="true"></i>
-                        </div>
-                        <div class="col-10 mb-2">
-                            <h5 class="feature-title font-bold mb-1">Modularity</h5>
-                            <p class="grey-text mt-2">Material Design for Bootstrap comes with both, compiled, ready to use libraries including all features as
-                                well as modules for CSS (SASS files) and JS.</p>
-                        </div>
-                    </div>
-                    <!--/Grid row-->
-                </div>
-                <!--/Grid column-->
-
-                <!--Grid column-->
-                <div class="col-xl-3 col-lg-6">
-                    <!--Grid row-->
-                    <div class="row">
-                        <div class="col-2">
-                            <i class="fas fa-question fa-2x mb-1 indigo-text" aria-hidden="true"></i>
-                        </div>
-                        <div class="col-10 mb-2">
-                            <h5 class="feature-title font-bold mb-1">Technical support</h5>
-                            <p class="grey-text mt-2">We care about reliability. If you have any questions - do not hesitate to contact us.
-                            </p>
-                        </div>
-                    </div>
-                    <!--/Grid row-->
-                </div>
-                <!--/Grid column-->
-
-                <!--Grid column-->
-                <div class="col-xl-3 col-lg-6">
-                    <!--Grid row-->
-                    <div class="row">
-                        <div class="col-2">
-                            <i class="fas fa-th fa-2x mb-1 indigo-text" aria-hidden="true"></i>
-                        </div>
-                        <div class="col-10 mb-2">
-                            <h5 class="feature-title font-bold mb-1">Flexbox</h5>
-                            <p class="grey-text mt-2">MDB fully supports Flex Box. You can forget about alignment issues.</p>
-                        </div>
-                    </div>
-                    <!--/Grid row-->
-                </div>
-                <!--/Grid column-->
-
-                <!--Grid column-->
-                <div class="col-xl-3 col-lg-6">
-                    <!--Grid row-->
-                    <div class="row">
-                        <div class="col-2">
-                            <i class="far fa-file-code fa-2x mb-1 indigo-text" aria-hidden="true"></i>
-                        </div>
-                        <div class="col-10 mb-2">
-                            <h5 class="feature-title font-bold mb-1">SASS files</h5>
-                            <p class="grey-text mt-2">Arranged and well documented .scss files can't wait until you compile them.</p>
-                        </div>
-                    </div>
-                    <!--/Grid row-->
-                </div>
-                <!--/Grid column-->
-
-            </div>
             <!--/Second row-->
 
         </section>

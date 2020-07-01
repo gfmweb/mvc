@@ -17,33 +17,34 @@ final class IndexController
 
 
 
-    public function index($params=null) // Вход
+    public function index($params=null) // ОСНОВНАЯ СТРАНИЦА
     {
-        if(!isset($_SESSION['User'])) {
+        if(!isset($_SESSION['User'])) { // Если пользователь не авторизированый
             require('models/IndexModel.php'); // подключение модели
             $model = new IndexModel(); // Создание экземпляра класса
             $model->index(); // Заполнили модель данными по ЛОГИНУ
             include('views/index/index.php'); // подключение вида
         }
-        else{
-            $model= new LkModel();
-            $model->GenerateLk();
-            include('views/lk/index.php');
+        else{ // если пользователь уже выполнил вход на сайт
+            $model= new LkModel(); // Модель принимает в себя данные для ЛК
+            $model->GenerateLk(); // Генерируется страница ЛК
+            include('views/lk/index.php'); // Подключается вид
         }
     }
 
 
 
-    public function lkSettings($params=null)
+    public function lkSettings($params=null) // страница изменения пользовательских настроек
     {
-        $model= new LkModel();
-        $model->LkSettings();
-        include('views/lk/settings.php');
+        $model= new LkModel(); // Модель принимает на себя данные для ЛК
+        $model->LkSettings(); // Генерируется страница настроек пользователя
+        include('views/lk/settings.php'); // подключается вид
     }
-    public function lkLogout($params=null)
+
+    public function lkLogout($params=null) // Метод выхода с сайта
     {
-        session_destroy();
-        header("Location: /");
+        session_destroy(); // Уничтожается сессия
+        header("Location: /"); // перенаправляется на основную страницу сайта
     }
 
 }

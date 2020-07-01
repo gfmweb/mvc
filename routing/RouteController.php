@@ -26,7 +26,7 @@ class RouteController
         // Действие 1 выделение контроллера и его метода работа с ключом url
         if(isset($req['url'])){ // Действия при указании контроллера и возможно его метода
             $cont_act = explode ("/",$req['url']); // Разбиение массиваа
-            $this->controller ='controllers\\'. $cont_act[0]; // получили контроллер
+            $this->controller ='controllers\\'. $cont_act[0].'Controller'; // получили контроллер
             if(isset($cont_act[1])){ // Действия при наличии указанного метода
                 $this->method=$cont_act[1];
             }

@@ -1,4 +1,15 @@
 <?php
+/**
+ * Файл настроек подключения к БД
+ *
+ *
+ *
+ *
+ *
+ */
+
+
+
 define("DB_HOST","localhost"); // где живет БД
 define("DB_NAME","mvc"); //Имя базы
 define("DB_USER","root"); //Пользователь

@@ -20,7 +20,7 @@ class Model
                             <button type=\"button\" class=\"close\" id='cls-but' data-dismiss=\"alert\" aria-label=\"Close\">
                                 <span aria-hidden=\"true\">&times;</span>
                             </button>
-                        </div>";
+                        </div>"; // Записываем алерт
 
             unset($_SESSION['alert']); // Обнуляем записанный в сессию алерт
         }
@@ -31,14 +31,14 @@ class Model
                                 <button type=\"button\" class=\"close\" id='cls-but' data-dismiss=\"alert\" aria-label=\"Close\">
                                     <span aria-hidden=\"true\">&times;</span>
                                 </button>
-                           </div>";
+                           </div>"; // Записываем алерт
 
             unset($_SESSION['success']); // Обнуляем записанный в сессию алерт
         }
         $this->loginModal='
                     <div class="modal fade" id="modalLoginForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="false">
                         <div class="modal-dialog" role="document">
-                           <form id="form" action="/DverController/login" method="post" class="needs-validation" novalidate>
+                           <form id="form" action="/Dver/login" method="post" class="needs-validation" novalidate>
                                 <div class="modal-content">
                                     <div class="modal-header text-center">
                                         <h4 class="modal-title w-100 font-weight-bold" id="FormName">Вход</h4>
@@ -71,17 +71,13 @@ class Model
                             </div>
                         </div>
                     </div>
-                    
-                    
-                    
-                    
                    <script>
-                   function changed(val)
-                   {
+                    function changed(val)
+                    {
                        $.ajax({ 
                          type: \'POST\', 
                          dataType: \'json\',
-                         url: \'/DverController/changeform\', 
+                         url: \'/Dver/changeform\', 
                          data: { \'form\': val }, 
                         success: function (data) { 
                             $(\'#FormName\').text(data.name);
@@ -89,18 +85,10 @@ class Model
                             $(\'.modal-body\').html(data.form);
                             $(\'.modal-footer\').html(data.footer);
                             $(\'#last\').html(data.last);
-                            
-                            
                                 }
                         });
-                   }
-</script> 
-                    
-                    
-                    
-                   
-                   
-                    
-                    ';
+                    }
+                    </script> 
+                    '; // Модальное окно входа
     }
 }
