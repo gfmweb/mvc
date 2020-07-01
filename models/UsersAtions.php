@@ -6,6 +6,7 @@ namespace models;
 use config\Db;
 use core\Mail;
 use core\SimpleImage;
+use core\CRUD;
 class UsersAtions
 {
 
@@ -60,8 +61,7 @@ class UsersAtions
             }
             if($action==="CheckUniq")// Если пользователь небыл найден то возможно мы просто проверяем его уникальность
             {
-
-              return true ;
+               return true ;
             }
 
         }
