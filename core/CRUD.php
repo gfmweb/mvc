@@ -63,11 +63,7 @@ class CRUD
             {
                 if($LIKE_RAVNO==='LIKE'){$needle="%".$needle."%";}
                 if(is_null($OR_AND)){$OR_AND=' OR ';}
-                $reserved=array('select','insert','update','show','create','delete','join','source','drop','union',',',';','alter');
-                foreach ($reserved as $word)
-                {
-                   $needle= str_ireplace($word,'',$needle);
-                }
+
                 $needle=$this->db->real_escape_string($needle);
                 $req="SELECT * FROM `".$this->table."` WHERE `".$ColName[0]."` ".$LIKE_RAVNO." '{$needle}'"; // Начальная часть запроса
                 $iMax=count($ColName);
