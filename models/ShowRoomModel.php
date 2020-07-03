@@ -1,6 +1,6 @@
 <?php
 
-
+//TODO DRY
 namespace models;
 
 
@@ -15,7 +15,7 @@ class ShowRoomModel extends Model
     public $content;
     public $title;
     public $script;
-    public $alert;
+
     public $navbar;
     public $content_result;
     public $pagination;
@@ -31,18 +31,7 @@ class ShowRoomModel extends Model
             $containerIfno= new CRUD('materials');
             $TotalPages=ceil($containerIfno->TotalRows/$maxcontent); // Делим количество строк на количество материалов на странице
 
-                if(!isset($params)) {
 
-                    $containerIfno->GetInfo(null,null,null,null,$maxcontent,null); //Запрашиваем все данные из таблицы
-                    $this->pagination= new Pagination(1,$TotalPages,'ShowRoom','page');
-                    foreach ($containerIfno->Resulting as $el){
-                        $this->content_result.=$el['content'];
-                    }
-
-                }
-
-                else // Если совершено действие в пагинации или пришел Ajax Запрос
-                {
 
                     if (($req_method === 'AjaxSearch')) // Если кто-то хочет поискать в Аяксе
                     {
@@ -83,26 +72,32 @@ class ShowRoomModel extends Model
                     else // Действия с Пагинацией
                     {
 
-                        if(isset($_SESSION['search']))
+                        if(isset($_SESSION['search'])) // Если пользователь что-то искал
                         {
-                            $this->SearchPlaysholder = $_SESSION['search'];
-                            $offset=($params[0]['val']-1)*$maxcontent;
+                            $offset=str_replace('page','',$req_method);
+                            if(($offset==='index')){$offset=1;} // Если к нам просто зашли и был запрошен метод индекс, тогда показывааем первую страницу
+                            $pagi_off=$offset; // Сохраняем значение отображенной страницы для пагинации
+                            $this->SearchPlaysholder = $_SESSION['search']; // Записываем состояние строки поиска в строку
+                            $offset=($offset-1)*$maxcontent; // Считаем сдвиг
                             $containerIfno->GetInfo(array('title','description','autor'),'OR','LIKE',$this->SearchPlaysholder,$maxcontent,$offset);
-                            $RowsCountAjax = $containerIfno->CurentRows;
+                            $RowsCountAjax = $containerIfno->CurentRows; // Количество строк при поиске составило
                             $TotalPages = intdiv($RowsCountAjax, $maxcontent); // Делим количество строк на количество материалов на странице
-                            if($containerIfno->CurentRows > 0){
-                                foreach ($containerIfno->Resulting as $el){
+                            if($containerIfno->CurentRows > 0){ // Если есть что показывать то в цикле формируем контент
+                                foreach ($containerIfno->Resulting as $el){ // Формирование контента
                                     $this->content_result.=$el['content'];
                                 }
                             }
-                            else{
+                            else{ // Если показывать нечего, то сообщаем об этом следующим образом
                                 $this->content_result.='<div class="mt-5 text-center"><h2>Ничего не найдено</h2></div>';
                             }
-                            $this->pagination= new Pagination($params[0]['val'],$TotalPages,'ShowRoom','page');
+                            $this->pagination= new Pagination($pagi_off,$TotalPages,'ShowRoom','page'); //Строим пагинацию
 
                         }
                         else{
-                            $offset=($params[0]['val']-1)*$maxcontent;
+                            $offset=str_replace('page','',$req_method);
+                            if(($offset==='index')){$offset=1;}
+                            $pagi_off=$offset;
+                            $offset=($offset-1)*$maxcontent;
                             $containerIfno->GetInfo(null,null,null, null,$maxcontent,$offset); //Запрашиваем все данные из таблицы
                             if($containerIfno->CurentRows > 0){
                                 foreach ($containerIfno->Resulting as $el){
@@ -112,22 +107,26 @@ class ShowRoomModel extends Model
                             else{
                                 $this->content_result.='Ничего не найдено';
                             }
-                            $this->pagination= new Pagination($params[0]['val'],$TotalPages,'ShowRoom','page'); // Создаем пагинацию
+                            $this->pagination= new Pagination($pagi_off,$TotalPages,'ShowRoom','page'); // Создаем пагинацию
 
                         }
 
                     }
-                }
+
 
             $this->content_result.=' 
                     </div>
                 </div>'; // Конец контентной части
 
         $this->content_result.=$this->pagination->pagi;
-        $this->navbar = Navbar::GetNavSh('Работы',$this->pages,false,$this->alert,'',$this->SearchPlaysholder); // передаем на построение верхнее меню 1-Активная страница ИМЯ 2-Массив страниц 3. Залогинены / нет 4. Алерт если он есть
-
+        if(isset($_SESSION['User_info'])){
+            $this->navbar = Navbar::GetNavSh('Работы',$this->pages,true,'',$this->SearchPlaysholder); // передаем на построение верхнее меню 1-Активная страница ИМЯ 2-Массив страниц 3. Залогинены / нет 4. Алерт если он есть
+        }
+        else{
+        $this->navbar = Navbar::GetNavSh('Работы',$this->pages,false,'',$this->SearchPlaysholder); // передаем на построение верхнее меню 1-Активная страница ИМЯ 2-Массив страниц 3. Залогинены / нет 4. Алерт если он есть
+        }
         $this->title='Работы';
-        $this->content=$this->alert.$this->loginModal;
+        $this->content=$this->loginModal;
         $this->script='';
 
     }

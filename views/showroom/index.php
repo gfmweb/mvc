@@ -15,23 +15,24 @@
     body{background-color: rgba(54,154,167,0.88)}
 </style>
 </head>
-<body >
-<div class="container-lg blue-gradient  text-center" style="width: 100%"> </div>
+<main style="min-height: 100%" >
+
 
 
 <?= $model->navbar ?>
-    <div class="container-fluid "  id="materials" style="min-height: 80%">
+    <div class="container-fluid "  id="materials" >
         <?= $model->content_result ?>
     </div>
 
-    <div class="container-fluid" id="content" >
+    <div class="container-fluid" id="content"  >
         <?= $model->content ?>
     </div>
-
+</main>
+<div class="page-footer" style="width: 100%">
 <?php
     include('template/footer_str.php');
 ?>
-
+</div>
 
 <script>
     $( document ).ready(function() {
@@ -47,14 +48,18 @@
     function filterquery(){
 
         let query = $('input[name="query"]').val();
+        let validator = $('#ValidateFormAccess').val();
             if(query.length > 0){
             $.ajax({
                 type: 'POST',
                 dataType: 'json',
-                url: '/ShowRoomController/AjaxSearch',
-                data: { 'query': query },
+                url: '/ShowRoom/AjaxSearch',
+                data: { 'query': query,'ValidateFormAccess' : validator},
                 success: function (data) {
                 $('#materials').html(data.content);
+                $('#ValidateFormAccessAjax').val(data.validator);
+                    $('#ValidateFormAccess').val(data.validator);
+
 
                 }
             });
@@ -64,11 +69,12 @@
                 $.ajax({
                     type: 'POST',
                     dataType: 'json',
-                    url: '/ShowRoomController/AjaxSearch',
+                    url: '/ShowRoom/AjaxSearch',
                     data: { 'query': 'clear' },
                     success: function (data) {
                         $('#materials').html(data.content);
-
+                        $('#ValidateFormAccessAjax').val(data.validator);
+                        $('#ValidateFormAccess').val(data.validator);
                     }
                 });
             }

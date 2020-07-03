@@ -20,7 +20,7 @@ final class IndexController
     public function index($params=null) // ОСНОВНАЯ СТРАНИЦА
     {
         if(!isset($_SESSION['User'])) { // Если пользователь не авторизированый
-            require('models/IndexModel.php'); // подключение модели
+
             $model = new IndexModel(); // Создание экземпляра класса
             $model->index(); // Заполнили модель данными по ЛОГИНУ
             include('views/index/index.php'); // подключение вида
@@ -36,6 +36,7 @@ final class IndexController
 
     public function lkSettings($params=null) // страница изменения пользовательских настроек
     {
+
         $model= new LkModel(); // Модель принимает на себя данные для ЛК
         $model->LkSettings(); // Генерируется страница настроек пользователя
         include('views/lk/settings.php'); // подключается вид

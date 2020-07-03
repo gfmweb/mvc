@@ -8,8 +8,10 @@
 
 namespace controllers;
 
+use core\ValidateAccess;
 use models\ShowRoomModel;
 use core\Magic;
+use models\UsersActions;
 
 class ShowRoomController extends Magic // Наследавание от класса Magic позволяет контроллеру обрабатывать все методы через единственный метод index
 {
@@ -20,17 +22,17 @@ class ShowRoomController extends Magic // Наследавание от клас
     public function index($req_method=null,$params=null) // получаем запрошенный метод и параметры
     {
         $model = new ShowRoomModel(); // Создаем модель
-        if($req_method!=='AjaxSearch') // Если контроллер обрабатывает обычный запрос
-        {
-            $model->index($req_method,$params); // Вызываем метод index
-            include 'views/showroom/index.php'; // Подключаем вид
-        }
+        $model->index($req_method,$params); // Вызываем метод index
+        if(($req_method!=='AjaxSearch')) // если запрос пришел с нашей формы
+            {
+                include 'views/showroom/index.php'; // Подключаем вид
+            }
         else // Если пришел Ajax запрос
-        {
+            {
 
-            $model->index($req_method,$params); // Передаем все параметры и запрошенный метод в index
-            $ansver=array('content'=>$model->content_result.'</div>'.$model->pagination->pagi); // формируем массив ответа
-            echo json_encode($ansver); // Отвечаем в Json формате
-        }
+                $ansver=array('content'=>$model->content_result.'</div>'.$model->pagination->pagi,'validator'=>$_SESSION['ValidateFormAccess']); // формируем массив ответа
+                echo json_encode($ansver); // Отвечаем в Json формате
+            }
+
     }
 }

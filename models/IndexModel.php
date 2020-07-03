@@ -27,7 +27,6 @@ class IndexModel Extends Model
     public $content;
     public $title;
     public $script;
-    public $alert;
     public $navbar;
 
 
@@ -35,11 +34,11 @@ class IndexModel Extends Model
     public function index() //Главная страница сайта если пользователь незалогинен
     {
 
-        $this->navbar = Navbar::GetNav('Главная',$this->pages,false,$this->alert); // передаем на построение верхнее меню 1-Активная страница ИМЯ 2-Массив страниц 3. Залогинены / нет 4. Алерт если он есть
+        $this->navbar=Navbar::GetNav('Главная',require 'config/nav_pages.php',false);
 
         $this->title='MVC'; // Записываем Тайтл нашей страницы
 
-        $this->content=$this->navbar.$this->loginModal.''; // Формируем полученный НАВБАР и Активное содержимое
+        $this->content=$this->loginModal.''; // Формируем полученный НАВБАР и Активное содержимое
 
         $this->script='
       
@@ -61,7 +60,7 @@ class IndexModel Extends Model
         }, false);
     })();
     
-'; // Добавляем скрипт
+'; // Добавляем скрипт Валидации формы
 
         return $this;
     }

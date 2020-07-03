@@ -7,7 +7,7 @@ namespace controllers;
 
 
 use core\ValidateAccess;
-use models\UsersAtions;
+use models\UsersActions;
 
 final class DverController
 {
@@ -21,17 +21,19 @@ final class DverController
         if(ValidateAccess::ValidAccess($params)) // Если форма пришла с нашего сайта то начинаем искать пользователя
         {
 
-            if(UsersAtions::findUser($params,'CheckLogin')) // Передаем в метод FindUser входящие параметры и ключ ПРОВЕРЬ ВХОД ПОЛЬЗОВАТЕЛЯ
+            if(UsersActions::findUser($params,'CheckLogin')) // Передаем в метод FindUser входящие параметры и ключ ПРОВЕРЬ ВХОД ПОЛЬЗОВАТЕЛЯ
             {
                 if(!isset($_SESSION['alert']))
                 {
                     $_SESSION['success']="Добро пожаловать ".$_SESSION['User']." !"; // Если нет ошибки активации аккаунта
+
                 }
             }
             else
             {
                 $_SESSION['alert']="Неверное имя пользователя или пароль"; // Если есть ошибка
             }
+
             header('Location: /'); // Возвращаем на индексную страницу
         }
         else{
@@ -44,9 +46,9 @@ final class DverController
     {
         if(ValidateAccess::ValidAccess($params)) // Если форма пришла с нашего сайта то проверяем уникальность пользователяпользователя
         {
-            if(UsersAtions::findUser($params,'CheckUniq')) // Передаем в метод FindUser входящие параметры и ключ ПРОВЕРЬ УНИКАЛЬНОСТЬ ПОЛЬЗОВАТЕЛЯ
+            if(UsersActions::findUser($params,'CheckUniq')) // Передаем в метод FindUser входящие параметры и ключ ПРОВЕРЬ УНИКАЛЬНОСТЬ ПОЛЬЗОВАТЕЛЯ
                 {
-                    UsersAtions::RegisterUser($params); // Передаем все параметры методу регистрации пользователя
+                    UsersActions::RegisterUser($params); // Передаем все параметры методу регистрации пользователя
                     $_SESSION['success']='Для активации аккаунта, пожалуйста пройдите по ссылке из письма отправленного Вам'; // Записываем сообшение для пользователя
 
                 }
@@ -55,6 +57,7 @@ final class DverController
                     $_SESSION['alert']='Ваш E-mail уже зарегистрирован в системе, попробуйте войти с его помощью'; // Говорим о том что такая почта у нас уже есть
 
                 }
+
             header('Location: /'); // Возвращаем пользователя на индексную страницу
         }
         else{
@@ -66,7 +69,7 @@ final class DverController
     {
         if(ValidateAccess::ValidAccess($params)) // Если форма пришла с нашего сайта то Работаем
         {
-            UsersAtions::Remind($params); // Передаем все в метод восстановления пароля
+            UsersActions::Remind($params); // Передаем все в метод восстановления пароля
             header("Location: /"); // Редиректим на индексную страницу
         }
         else{
@@ -76,7 +79,7 @@ final class DverController
 
     public function activate($params=null) // подтверждение учетной записи (E-mail) Не поддерживает проверку формы т.к. не использует её
     {
-        $re=UsersAtions::TryActivate($params); // Передаем всё в метод ПРОБУЕМ АКТИВИРОВАТЬ
+        $re=UsersActions::TryActivate($params); // Передаем всё в метод ПРОБУЕМ АКТИВИРОВАТЬ
         if($re===1) // Если вернулся положительный результат
         {
             $_SESSION['success']="Ваш E-mail был успешно подтвержден. Теперь Вы можете авторизироваться на сайте"; // Записываем сообщение для пользователя
@@ -87,7 +90,7 @@ final class DverController
     {
         if(ValidateAccess::ValidAccess($params)) // Если форма пришла с нашего сайта то Работаем
         {
-           $result=UsersAtions::Update($params); // Передаем все данные методу АПДЕЙТ
+           $result=UsersActions::Update($params); // Передаем все данные методу АПДЕЙТ
            $action = stripos($result, "email"); // Проверяем был ли изменен почтовый ящик пользователя
 
           if ($action === false) { // Если почта не была изменена
@@ -103,7 +106,7 @@ final class DverController
     }
     public function changeform($params=null) // Метод смены форм окон регистрации / входа / восстановления пароля РАБОТАЕТ через Ajax
     {
-        $data=UsersAtions::ChangeFormModal($params);  // Передаем параметры методу
+        $data=UsersActions::ChangeFormModal($params);  // Передаем параметры методу
         echo(json_encode($data)); // Отвечаем в json формате
     }
 }

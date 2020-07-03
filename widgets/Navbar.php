@@ -6,20 +6,73 @@ namespace widgets;
 
 class Navbar
 {
-    public static function GetNav($active_page='Главная',$page_array,$logined=false,$alert='')
+    public static function LogoAlert($param='logo')
+        /**
+         * Принимает параметр того что нужно вернуть
+         * по умолчанию вернет ЛОГО пользователя
+         */
+    {
+        if($param==='logo') // Если пришел параметр ДАЙ ЛОГО пользователя
+        {
+            if(!isset($_SESSION['User_info']['photo'][0])) // если нет у ползователя фотографии
+            {
+                $logo=" <i class=\"fas fa-user\"></i>";
+            }
+            else{
+                $logo='<img src="'.$_SESSION['User_info']['photo'].'" class="rounded-circle z-depth-0" alt="avatar image" width="45" height="40">';
+            }
+            return $logo;
+        }
+        else // Иначе возвращаем сообщение для пользователя
+        {
+
+
+            if(isset($_SESSION['alert']))
+            {
+
+                $alert="<div class=\"alert alert-danger alert-dismissible fade show\" role=\"alert\">
+                                <strong>".$_SESSION['alert']."</strong> 
+                                <button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\">
+                                    <span aria-hidden=\"true\">&times;</span>
+                                </button>
+                          </div>
+                          ";
+               unset($_SESSION['alert']);
+                return $alert;
+            }
+            if(isset($_SESSION['success']))
+            {
+
+                $alert="<div class=\"alert alert-success alert-dismissible fade show\" role=\"alert\">
+                                    <strong>".$_SESSION['success']."</strong> 
+                                    <button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\">
+                                        <span aria-hidden=\"true\">&times;</span>
+                                    </button>
+                              </div>
+                  ";
+               unset($_SESSION['success']);
+                return $alert;
+            }
+
+
+        }
+    }
+
+
+
+
+
+
+
+    public static function GetNav($active_page='Главная',$page_array,$logined=false)
     {
 
-        if(!isset($_SESSION['User_info']['photo']))
-        {
-            $logo=" <i class=\"fas fa-user\"></i>";
-        }
-        else{
-            $logo='<img src="'.$_SESSION['User_info']['photo'].'" class="rounded-circle z-depth-0" alt="avatar image" width="45" height="40">';
-        }
+
         require_once 'config/config.php';
 
         if($logined==false) // Если генерируется меню для незарегистрированого пользователя
         {
+
            $right_nav=' <ul class="navbar-nav nav-flex-icons">
                                        <li class="nav-item"> 
                                             <a   data-toggle="modal" data-target="#modalLoginForm" class="nav-link border border-light rounded waves-effect waves-light"
@@ -34,7 +87,7 @@ class Navbar
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink-333" data-toggle="dropdown"
           aria-haspopup="true" aria-expanded="false">
-           '.$logo.'
+           '.self::LogoAlert().'
         </a>
         <div class="dropdown-menu dropdown-menu-lg-right dropdown-default"
           aria-labelledby="navbarDropdownMenuLink-333">
@@ -42,8 +95,11 @@ class Navbar
         </div>
       </li>
     </ul>';
+                $page_array['Мои работы']='/Index/myworks';
+                $page_array['Настройки']='/Index/lksettings';
         }
             $links='';
+
         foreach ($page_array as $key=>$val)
         {
             if($key===$active_page)
@@ -92,14 +148,14 @@ class Navbar
         </div>
 
     </div>
-    <div class="row justify-content-center mt-4"><div class="container">'.$alert.'</div>
+    <div class="row justify-content-center mt-4"><div class="container">'.(self::LogoAlert('alert')).'</div>
 </nav>
 ';
 
         return $nav;
     }
 
-    public static function GetNavSh($active_page='Главная',$page_array,$logined=false,$alert='',$formact=null,$placeholder=null)
+    public static function GetNavSh($active_page='Главная',$page_array,$logined=false,$formact=null,$placeholder=null)
     {
 
         if(!isset($_SESSION['User_info']['photo']))
@@ -135,8 +191,11 @@ class Navbar
         </div>
       </li>
     </ul>';
+            $page_array['Мои работы']='/Index/myworks';
+            $page_array['Настройки']='/Index/lksettings';
         }
         $links='';
+
         foreach ($page_array as $key=>$val)
         {
             if($key===$active_page)
@@ -157,7 +216,7 @@ class Navbar
         $search='<form class="form-inline mr-auto"  method="post">
                     <div class="md-form my-0">
                         <input class="form-control mr-sm-2" type="text" name="query" placeholder="Поиск" aria-label="Search" value="'.$placeholder.'" onkeyup="filterquery()">
-                        <input  type="hidden" value="'.$_SESSION['ValidateFormAccess'].'" id="ValidateFormAccess" name="ValidateFormAccess" >
+                        <input  type="hidden" value="'.$_SESSION['ValidateFormAccess'].'" id="ValidateFormAccessAjax" name="ValidateFormAccess" >
                         <i class="fa fa-search prefix text-white"></i>
                     </div>
                 </form>
@@ -193,7 +252,7 @@ class Navbar
         </div>
 
     </div>
-    <div class="row justify-content-center mt-4"><div class="container">'.$alert.'</div>
+    <div class="row justify-content-center mt-4"><div class="container">'.self::LogoAlert('alert').'</div>
 </nav>
 ';
 

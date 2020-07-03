@@ -522,14 +522,16 @@ include('template/header_str.php');
         <!--Section: More-->
 
     </div>
-</main>
+
     <div class="container-fluid" id="content" >
         <?= $model->content ?>
     </div>
-
+    </main>
+<div  style="width: 100%">
 <?php
 include('template/footer_str.php');
 ?>
+</div>
 <script>
 $( document ).ready(function() {
 

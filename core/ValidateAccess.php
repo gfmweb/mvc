@@ -40,4 +40,8 @@ class ValidateAccess
             }
         }
     }
+    public static function IsLogined() // Проверяем залогинен ли пользователь
+    {
+        if(isset($_SESSION['User_info'])){return true;}
+    }
 }

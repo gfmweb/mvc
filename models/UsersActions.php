@@ -3,51 +3,49 @@
 
 namespace models;
 
-use config\Db;
+
 use core\Mail;
 use core\SimpleImage;
 use core\CRUD;
-class UsersAtions
+
+class UsersActions
 {
 
     public static function findUser($params=null,$action=null) // поиск пользователя в БД и проверка его входа/ либо проверка уникальности почты
     {
         if(is_array($params)) // Если нам скормили нормальный массив данных
         {
-
             for($i = 0, $iMax = count($params); $i < $iMax; $i++) // Перебираем массив и ищем интересующий нас ключ
             {
                 if($params[$i]['param'] === 'UserEmail') {
                     $mail=$params[$i]['val'];
-                    $db = Db::init();
-                    $result = $db->query("SELECT * FROM `users` WHERE `email` = '{$db->escape_string($params[$i]['val'])}' ");
-                    $user = $result->fetch_assoc(); break; // пользователь помещен в массив Прекращаем цикл
+                    $db = new CRUD('users');
+                    $result = $db->GetInfo(['email'],null,'=',$params[$i]['val'],1,0);
+                    $user = $result->Resulting;
+                    break; // пользователь помещен в массив Прекращаем цикл
                 }
             }
 
-            if(isset($user['email'][0])) // если такой пользователь найден, то проверяем его дальше
+            if(isset($user[0]['email'])) // если такой пользователь найден, то проверяем его дальше
             {
-
                 if($action==="CheckLogin") // проверяем персональный экшен для этого поиска
                 {
                     for($i=0,$iMax=count($params); $i < $iMax; $i++) // перебираем массив переменных дл поиска пароля
                     {
-                        if(($params[$i]['param']==='UserPassword')&&(password_verify($params[$i]['val'],$user['password']))) //Если всё совпало
+                        if(($params[$i]['param']==='UserPassword')&&(password_verify($params[$i]['val'],$user[0]['password']))) //Если всё совпало
                         {
-                            $pass=$user['password'];
-                           if($user['confirm']!=='0') // Если пользователь прошел подтверждение его почты
+                            $pass=$user[0]['password'];
+                           if($user[0]['confirm']!=='0') // Если пользователь прошел подтверждение его почты
                                {
-
-                                   $_SESSION['User'] = $user['name']; // Записали в сессию как зовут пользователя
-                                   $_SESSION['User_info'] = $user;
+                                   $_SESSION['User'] = $user[0]['name']; // Записали в сессию как зовут пользователя
+                                   $_SESSION['User_info'] = $user[0];
                                    return true;
                                    break; // возвращаем ТРУ
                                }
                            else // Если пользователь не подтвердил свой ящик
                                {
-
                                    $_SESSION['alert']='Вы не подтвердили свой E-mail. На всякий случай мы повторно отправили Вам письмо с подтверждением Пожалйуста проверьте почту';
-                                   $name=$user['name'];
+                                   $name=$user[0]['name'];
                                    $mail_send = new Mail($_SERVER['SERVER_NAME']); // Создаём экземпляр класса
                                    $mail_send->setFromName("Администрация сайта"); // Устанавливаем имя в обратном адресе
                                    $mail_send->send($mail, "Подтверждение почтового ящика. Повторное письмо", "<h3>Здравствуйте ".$name."!</h3><p>Вы получили это письмо для подтверждения регистрации на сайте <strong>".$_SERVER['SERVER_NAME']."</strong> </p><p>Для активации Вашего аккаунта пройдите по ссылке: <a href='https://".$_SERVER['SERVER_NAME']."/Dver/activate?login=".$pass."&mail=".$mail."'>https://".$_SERVER['SERVER_NAME']."/Dver/activate?login=".$pass."&mail=".$mail."</a></p>");
@@ -93,25 +91,27 @@ class UsersAtions
 
         if(isset($user, $mail, $pass)) // проверяем готовность к регистрации И если всё есть то начинаем писать пользователя  Базу
         {
+            $password=password_hash($pass,PASSWORD_DEFAULT);
+            $db = new CRUD('users'); // Инициализируем работу с таблицей users
+            if($db->Add(array('email'=>$mail,'password'=>$password,'name'=>$user))){ // Если запись добавлена то отправляем письмо
 
-            $db = Db::init(); // Инициализируем БД
-            $pass=password_hash($pass,PASSWORD_DEFAULT); // Защищаем пароль
-            $mail=$db->escape_string($mail); // Экранируем Емайл
-            $user=$db->escape_string($user); // Экранируем Имя
-            $db->query("INSERT INTO `users` SET `email` = '".$mail."', `password` = '".$pass."', `name` = '".$user."' ");// Добавляем в БД
-            $mail_send = new Mail($_SERVER['SERVER_NAME']); // Создаём экземпляр класса
-            $mail_send->setFromName("Администрация сайта"); // Устанавливаем имя в обратном адресе
-            $mail_send->send($mail, "Подтверждение почтового ящика", "<h3>Здравствуйте ".$user."!</h3><p>Вы получили это письмо для подтверждения регистрации на сайте <strong>".$_SERVER['SERVER_NAME']."</strong> </p><p>Для активации Вашего аккаунта пройдите по ссылке: <a href='https://".$_SERVER['SERVER_NAME']."/Dver/activate?login=".$pass."&mail=".$mail."'>https://".$_SERVER['SERVER_NAME']."/Dver/activate?login=".$pass."&mail=".$mail."</a></p>");
+                $mail_send = new Mail($_SERVER['SERVER_NAME']); // Создаём экземпляр класса
+                $mail_send->setFromName("Администрация сайта"); // Устанавливаем имя в обратном адресе
+                $mail_send->send($mail, "Подтверждение почтового ящика", "<h3>Здравствуйте ".$user."!</h3><p>Вы получили это письмо для подтверждения регистрации на сайте <strong>".$_SERVER['SERVER_NAME']."</strong> </p><p>Для активации Вашего аккаунта пройдите по ссылке: <a href='https://".$_SERVER['SERVER_NAME']."/Dver/activate?login=".$password."&mail=".$mail."'>https://".$_SERVER['SERVER_NAME']."/Dver/activate?login=".$pass."&mail=".$mail."</a></p>");
+            }
+            else
+            {
+
+            }
         }
 
     }
 
     public static function TryActivate($params = null) // Попытка подтвердить E-mail пользователя
     {
-            $db = Db::init(); // Инициализируем БД
-            $db->query("UPDATE `users` SET `confirm` = '1' WHERE `password` = '".$params[0]['val']."' AND `email`='".$params[1]['val']."' ");  // Возвращаем результат попытки обновления
-            return $db->affected_rows;
-
+            $db = new CRUD('users'); // Инициализируем БД
+            $rows = $db->Update (array('confirm' => '1'), 'AND','=',array('password'=>$params[0]['val'],'email'=>$params[1]['val']));  // Возвращаем результат попытки обновления
+            return $rows;
     }
 
     public static function Remind($params=null) // Восстановление пароля

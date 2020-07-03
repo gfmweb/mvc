@@ -7,34 +7,13 @@ namespace core;
 class Model
 {
     public $pages;
-    public $alert;
+
     public $loginModal;
 
     public function __construct()
     {
         $this->pages= include 'config/nav_pages.php';// Сбор данных из конфигурации
-        if(isset($_SESSION['alert'])) // Проверяем есть ли Алерт с ошибкой
-        {
-            $this->alert="<div class=\"alert alert-danger alert-dismissible fade show\" role=\"alert\">
-                            <strong>".$_SESSION['alert']."</strong> 
-                            <button type=\"button\" class=\"close\" id='cls-but' data-dismiss=\"alert\" aria-label=\"Close\">
-                                <span aria-hidden=\"true\">&times;</span>
-                            </button>
-                        </div>"; // Записываем алерт
 
-            unset($_SESSION['alert']); // Обнуляем записанный в сессию алерт
-        }
-        if(isset($_SESSION['success'])) // Проверяем есть ли алерт с Успехом
-        {
-            $this->alert="<div class=\"alert alert-success alert-dismissible fade show\" role=\"alert\">
-                                <strong>".$_SESSION['success']."</strong> 
-                                <button type=\"button\" class=\"close\" id='cls-but' data-dismiss=\"alert\" aria-label=\"Close\">
-                                    <span aria-hidden=\"true\">&times;</span>
-                                </button>
-                           </div>"; // Записываем алерт
-
-            unset($_SESSION['success']); // Обнуляем записанный в сессию алерт
-        }
         $this->loginModal='
                     <div class="modal fade" id="modalLoginForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="false">
                         <div class="modal-dialog" role="document">

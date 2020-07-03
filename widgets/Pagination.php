@@ -30,11 +30,11 @@ class Pagination
                 $backIndicator=$Position-1;
                 if($backIndicator > 0)
                 {$back='                    <li class="page-item ">
-                                              <li class="page-item"><a href="/'.$Controller.'?'. $PageName .'='.$backIndicator.'" class="page-link">Назад</a></li>
+                                              <li class="page-item"><a href="/'.$Controller.'/'. $PageName .''.$backIndicator.'" class="page-link">Назад</a></li>
                                            </li> ';}
                 else{$back=null;}
                 if($Position<=10){$first='<li class="page-item ">
-                                              <li class="page-item"><a href="/'.$Controller.'?'.$PageName.'=1" class="page-link">1</a></li>
+                                              <li class="page-item"><a href="/'.$Controller.'/'.$PageName.'1" class="page-link">1</a></li>
                                           </li>';}
                 else{$first=null;}
                 $this->pagi_start='<div class="row justify-content-center mt-5">  
@@ -72,7 +72,7 @@ class Pagination
                 else
                 {
                     $this->pagi_body.='<li class="page-item ">
-                                              <li class="page-item"><a href="/'.$Controller.'?'.$PageName.'='.$i.'" class="page-link">'.$i.'</a></li>
+                                              <li class="page-item"><a href="/'.$Controller.'/'.$PageName.''.$i.'" class="page-link">'.$i.'</a></li>
                                           </li>';
                 }
             }
@@ -82,14 +82,14 @@ class Pagination
             {
                 if($BigI==0){$startI=1;$stopI=10;}else{$startI=$BigI*10; $stopI=$startI+10;}
                 $this->pagi_big.='<li class="page-item ">
-                                              <li class="page-item"><a href="/'.$Controller.'?'.$PageName.'='.$startI.'" class="page-link"><small style="white-space: nowrap"><strong>'.$startI.'-'.$stopI.'</strong></small></a></li>
+                                              <li class="page-item"><a href="/'.$Controller.'/'.$PageName.''.$startI.'" class="page-link"><small style="white-space: nowrap"><strong>'.$startI.'-'.$stopI.'</strong></small></a></li>
                                           </li>';
             }
             if($Position!==$Pages)
             {
                 $NextPage=$Position+1;
                 $this->pagi_end=' <li class="page-item ">
-                                                    <a href="/'.$Controller.'?'.$PageName.'='.$NextPage.'" class="page-link">Далее</a>
+                                                    <a href="/'.$Controller.'/'.$PageName.''.$NextPage.'" class="page-link">Далее</a>
                                                 </li>
                                             </ul>
                                          </nav>
@@ -123,7 +123,7 @@ class Pagination
                 else
                 {
                     $this->pagi_body.='<li class="page-item ">
-                                              <li class="page-item"><a href="/'.$Controller.'?'.$PageName.'='.$i.'" class="page-link">'.$i.'</a></li>
+                                              <li class="page-item"><a href="/'.$Controller.'/'.$PageName.''.$i.'" class="page-link">'.$i.'</a></li>
                                           </li>';
                 }
             }
@@ -133,7 +133,7 @@ class Pagination
                 $NextPage=$Position+1;
                 if($NextPage<=$Pages){
                 $this->pagi_end=' <li class="page-item ">
-                                                    <a href="/'.$Controller.'?'.$PageName.'='.$NextPage.'" class="page-link">Далее</a>
+                                                    <a href="/'.$Controller.'/'.$PageName.''.$NextPage.'" class="page-link">Далее</a>
                                                 </li>
                                             </ul>
                                          </nav>
