@@ -116,17 +116,18 @@ class UsersActions
 
     public static function Remind($params=null) // Восстановление пароля
     {
-        $db = Db::init(); // Инициализируем БД
-        $res=$db->query("SELECT * FROM `users` WHERE `email` ='".$params[0]['val']."'"); // Спрашиваем у БД есть ли такой
-        $user=$res->fetch_assoc(); // Пытаемся перевести в массив
-        if(isset($user['id'])) // Если таковой нашелся
+        $db = new CRUD('users'); // Инициализируем БД
+        $user=$db->GetInfo(array('email'),null,'=',$params[0]['val'],1,0)->Resulting;
+
+
+        if(isset($user[0]['id'])) // Если таковой нашелся
         {
             $new_user_pass=uniqid("",true);
             $new_pass=password_hash($new_user_pass,PASSWORD_DEFAULT);
-            $db->query("UPDATE `users` SET `password` = '".$new_pass."' WHERE `id` = '".$user['id']."' ");
+            $db->Update(array('password'=>$new_pass) , null,'=',array('id'=>$user[0]['id']));
             $mail_send = new Mail($_SERVER['SERVER_NAME']); // Создаём экземпляр класса
             $mail_send->setFromName("Администрация сайта"); // Устанавливаем имя в обратном адресе
-            $mail_send->send($user['email'], "Восстановление доступа", "<h3>Здравствуйте ".$user['name']."!</h3><p>В этом письме Ваш временный пароль к сайту <strong>".$_SERVER['SERVER_NAME']."</strong> </p><p>Вы сможете сменить его в личном кабинете </p><p>Для входа сейчас используйте этот пароль: <strong>".$new_user_pass."</strong></p>");
+            $mail_send->send($user[0]['email'], "Восстановление доступа", "<h3>Здравствуйте ".$user[0]['name']."!</h3><p>В этом письме Ваш временный пароль к сайту <strong>".$_SERVER['SERVER_NAME']."</strong> </p><p>Вы сможете сменить его в личном кабинете </p><p>Для входа сейчас используйте этот пароль: <strong>".$new_user_pass."</strong></p>");
             $_SESSION['success']='Временный пароль был отправлен на Email: '.$params[0]['val'];
         }
         else{
@@ -136,64 +137,38 @@ class UsersActions
 
     public static function Update($params=null) // Изменение Учетных данных пользователя
     {
+
         foreach ($params as $el)
         {
-            if($el['param']==='UserName')
-            {
-                $User=$el['val'];
-            }
-            elseif ($el['param']==='UserEmail')
-            {
-                $Email=$el['val'];
-            }
-            elseif ($el['param']==='UserPassword')
-            {
-                $Password=$el['val'];
-            }
-            elseif ($el['param']==='UserId')
-            {
-                $Target=$el['val'];
-            }
-            elseif ($el['param']==='UserPhoto')
-            {
-                $Photo=$el['val'];
-            }
+            if($el['param']==='UserName')  {  $User=$el['val']; }
+            elseif ($el['param']==='UserEmail') { $Email=$el['val']; }
+            elseif ($el['param']==='UserPassword') { $Password=$el['val']; }
+            elseif ($el['param']==='UserId')  { $Target=$el['val'];  }
+            elseif ($el['param']==='UserPhoto') { $Photo=$el['val']; }
         }
           if(!isset($Photo)){$Photo='no_photo';}
           if(!isset($Password)){$Password='stay_old_password_1';}
-          if(isset($User,$Email,$Password,$Target,$Photo)) // Если собраны все необходимые элементы для того чтобы Что-то могла быть изменено
-        {
-            $db=Db::init();
-            $req=$db->query("SELECT * FROM `users` WHERE `id` = '".$Target."'");
-            $curent_user=$req->fetch_assoc();
-            if($curent_user['id']) // Если есть такой пользователь то можно проверять что-там у него поменялось
+            $Target=($_SESSION['User_info']['id']);
+            $db= new CRUD('users');
+            $curent_user=$db->Getinfo(array('id'),null,'=',$Target,1,0)->Resulting;
+
+            if($curent_user[0]['id']) // Если есть такой пользователь то можно проверять что-там у него поменялось
             {
-                if($User!==$curent_user['name'])
-                {
-                    $name_flag=true;
-                }
-                if($Email!==$curent_user['email'])
-                {
-                    $mail_flag=true;
-                }
-                if($Password!=='stay_old_password_1')
-                {
-                    $password_flag=true;
-                }
-                if($Photo!=='no_photo')
-                {
-                    $photo_flag=true;
-                }
+                if($User!==$curent_user[0]['name'])   { $name_flag=true;     }
+                if($Email!==$curent_user[0]['email']) { $mail_flag=true;     }
+                if($Password!=='stay_old_password_1') { $password_flag=true; }
+                if($Photo!=='no_photo')               { $photo_flag=true;    }
                 $result=''; // Создаем пустой результат
                 if(isset($name_flag))
                 {
-                    $db->query("UPDATE `users` SET `name` = '".$db->escape_string($User)."' WHERE `id` = '".$Target."'");
+                    $db->Update(array('name'=>$User),null,'=',array('id'=>$Target));
                     $_SESSION['User_info']['name']=$User;
+                    $_SESSION['User']=$User;
                     $result .= '_name_changed_';
                 }
                 if(isset($mail_flag))
                 {
-                    $db->query("UPDATE `users` SET `email` = '".$db->escape_string($Email)."', `confirm`=FALSE WHERE `id` = '".$Target."'");
+                    $db->Update(array('email'=>$Email,'confirm'=>false),null,'=',array('id'=>$Target));
                     $mail_send = new Mail($_SERVER['SERVER_NAME']); // Создаём экземпляр класса
                     $mail_send->setFromName("Администрация сайта"); // Устанавливаем имя в обратном адресе
                     $mail_send->send($Email, "Подтверждение нового почтового ящика", "<h3>Здравствуйте ".$User."!</h3><p>Вы получили это письмо для подтверждения изменения почтового ящика  на сайте <strong>".$_SERVER['SERVER_NAME']."</strong> </p><p>Для активации Вашего аккаунта пройдите по ссылке: <a href='https://".$_SERVER['SERVER_NAME']."/Dver/activate?login=".$curent_user['password']."&mail=".$Email."'>https://".$_SERVER['SERVER_NAME']."/Dver/activate?login=".$curent_user['password']."&mail=".$Email."</a></p>");
@@ -203,7 +178,7 @@ class UsersActions
                 if(isset($password_flag))
                 {
                     $new_pass=password_hash($Password,PASSWORD_DEFAULT);
-                    $db->query("UPDATE `users` SET `password` = '".$new_pass."' WHERE `id` = '".$Target."'");
+                    $db->Update(array('password'=>$new_pass),null,'=',array('id'=>$Target));
                     $result .= '_password_changed_';
                 }
                 if(isset($photo_flag))
@@ -215,117 +190,55 @@ class UsersActions
                     if(($Photo['error'] === 0) && $Photo['type'] == "image/png") {
                         $name=uniqid('', true).".png";
                         move_uploaded_file($Photo['tmp_name'], "content/avatars/".$name); // Переносим полученный файл
-                        $new_photo="content/avatars/".$name;
-                        $image = new SimpleImage();
-                        $image->load($new_photo);
-                        $image->resize(200, 200);
-                        $image->save('content/avatars/ava_'.$name);
-                        $new_photo="/content/avatars/ava_".$name;
-                        unlink('content/avatars/'.$name);
+                        $new_photo=self::ava($name);;
                     }
                     if(($Photo['error'] === 0) && $Photo['type'] == "image/jpeg") {
                         $name=uniqid('', true).".jpeg";
                         move_uploaded_file($Photo['tmp_name'], "content/avatars/".$name); // Переносим полученный файл
-                        $new_photo="content/avatars/".$name;
-                        $image = new SimpleImage();
-                        $image->load($new_photo);
-                        $image->resize(200, 200);
-                        $image->save('content/avatars/ava_'.$name);
-                        $new_photo="/content/avatars/ava_".$name;
-                        unlink('content/avatars/'.$name);
+                        $new_photo=self::ava($name);
                     }
                     if(($Photo['error'] === 0) && $Photo['type'] == "image/gif") {
                         $name=uniqid('', true).".gif";
                         move_uploaded_file($Photo['tmp_name'], "content/avatars/".$name); // Переносим полученный файл
-                        $new_photo="content/avatars/".$name;
-                        $image = new SimpleImage();
-                        $image->load($new_photo);
-                        $image->resize(200, 200);
-                        $image->save('content/avatars/ava_'.$name);
-                        $new_photo="/content/avatars/ava_".$name;
-                        unlink('content/avatars/'.$name);
+                        $new_photo=self::ava($name);
                     }
 
                     if(isset($new_photo)){
-                    $_SESSION['User_info']['photo']=$new_photo;
-                    $db->query("UPDATE `users` SET `photo` = '".$new_photo."' WHERE `id` = '".$Target."'");
-                    $result .= '_photo_changed_';
+                        $_SESSION['User_info']['photo']=$new_photo;
+                        $db->Update(array('photo'=>$new_photo),null,'=',array('id'=>$Target));
+                        $result .= '_photo_changed_';
                     }
                 }
 
-            }
+
         }
         return $result;
     }
 
+    private static function ava($name)
+    {
+        $new_photo="content/avatars/".$name;
+        $image = new SimpleImage();
+        $image->load($new_photo);
+        $image->resize(200, 200);
+        $image->save('content/avatars/ava_'.$name);
+        $new_photo="/content/avatars/ava_".$name;
+        unlink('content/avatars/'.$name);
+        return $new_photo;
+    }
     public static function ChangeFormModal($params=null)
     {
         if($params[0]['val']==='Регистрация')
         {
-            $result=array('act'=>'/Dver/register',
-                          'name'=>'Регистрация',
-                          'form'=>'            <div class="md-form mb-5">
-                                                    <i class="fas fa-user  prefix grey-text"></i>
-                                                    <input type="text" name="UserName" id="defaultForm-name" class="form-control validate" autofocus required>
-                                                    <label data-error="" data-success="" for="defaultForm-name">Ваше Имя</label>
-                                                  </div>
-                                                <div class="md-form mb-5">
-                                                    <i class="fas fa-envelope prefix grey-text"></i>
-                                                    <input type="email" name="UserEmail" id="defaultForm-email" class="form-control validate" required>
-                                                    <label data-error="" data-success="" for="defaultForm-email">Ваша почта</label>
-                                                  </div>
-                                                  <div class="md-form mb-4">
-                                                    <i class="fas fa-lock prefix grey-text"></i>
-                                                    <input type="password"  name="UserPassword"  id="defaultForm-pass" class="form-control validate" required>
-                                                    <label data-error="" data-success="" for="defaultForm-pass">Ваш пароль</label>
-                                                  </div>
-                                                 <input  type="hidden" value="'.$_SESSION['ValidateFormAccess'].'" id="ValidateFormAccess" name="ValidateFormAccess" > ',
-                          'footer'=>'<button class="btn btn-default" type="submit">Зарегистрироваться</button>',
-                           'last'=>'<div class="row justify-content-between">
-                                        <span  class="loginLink"  onclick="changed(\'Вход\')">&nbsp;Вход</span>
-                                        <span  class="loginLink" onclick="changed(\'Восстановление пароля\')">Забыли пароль&nbsp;</span>
-                                    </div>' );
+            $result= require 'modals/JSON/register_form.php';
         }
         elseif($params[0]['val']==='Восстановление пароля')
         {
-            $result=array('act'=>'/Dver/remind',
-                'name'=>'Восстановление пароля',
-                'form'=>'<div class="md-form mb-5">
-                                            <div class="md-form mb-2">
-                                                <i class="fas fa-envelope prefix grey-text"></i>
-                                                <input type="email" name="UserEmail" id="defaultForm-email" class="form-control validate" required>
-                                                <label data-error="" data-success="" for="defaultForm-email">Ваша почта указанная при регистрации</label>
-                                            </div> 
-                                             <input  type="hidden" value="'.$_SESSION['ValidateFormAccess'].'" id="ValidateFormAccess" name="ValidateFormAccess" >
-                                            
-                                            ',
-                'footer'=>'<button class="btn btn-default" type="submit">Восстановить</button>',
-                'last'=>'<div class="row justify-content-between">
-                                        <span  class="loginLink"   onclick="changed(\'Вход\')">&nbsp;Вход</span>
-                                        <span  class="loginLink"  onclick="changed(\'Регистрация\')">Регистрация&nbsp;</span>
-                                    </div>' );
+            $result= require 'modals/JSON/remind_form.php';
         }
         elseif($params[0]['val']==='Вход')
         {
-            $result=array(
-                          'act'=>'/Dver/login',
-                          'name'=>'Вход',
-                          'form'=>'<div class="md-form mb-5">
-                                                    <i class="fas fa-envelope prefix grey-text"></i>
-                                                    <input type="email" name="UserEmail" id="defaultForm-email" class="form-control validate" required>
-                                                    <label data-error="" data-success="" for="defaultForm-email">Ваша почта</label>
-                                                  </div>
-                                                  <div class="md-form mb-4">
-                                                    <i class="fas fa-lock prefix grey-text"></i>
-                                                    <input type="password"  name="UserPassword"  id="defaultForm-pass" class="form-control validate" required>
-                                                    <label data-error="" data-success="" for="defaultForm-pass">Ваш пароль</label>
-                                                  </div>
-                                                 <input  type="hidden" value="'.$_SESSION['ValidateFormAccess'].'" id="ValidateFormAccess" name="ValidateFormAccess" >',
-                          'footer'=>'  <button class="btn btn-default" type="submit">Войти</button>',
-                           'last'=>'<div class="row justify-content-between">
-                                        <span  class="loginLink"   onclick="changed(\'Регистрация\')">&nbsp;Регистрация</span>
-                                        <span  class="loginLink"  onclick="changed(\'Восстановление пароля\')">Забыли пароль&nbsp;</span>
-                                    </div>   ' );
+            $result=require 'modals/JSON/login_form.php';
         }
         return $result;
     }

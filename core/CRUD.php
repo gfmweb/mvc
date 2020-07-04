@@ -91,8 +91,7 @@ final class CRUD
             }
         return $this; // Возвращаем результат
     }
-    // Конец чтения
- //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     // Добавление INSERT
     public function Add(array $INSERT_ARRAY=null ) // Принимаем массив колонка=>значение
     {
@@ -115,9 +114,7 @@ final class CRUD
     }
 
 
-    // Конец Добавления
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Изменение UPDATE
     public function Update(array $TargetCals_and_SETTINGS = null,  $OR_AND='OR', $LIKE_RAVNO='LIKE', array $Search_Area=null)
     {
@@ -159,15 +156,37 @@ final class CRUD
                 $result=array_merge($TargetCals_and_SETTINGS,$Search_Area); // Объединяем массивы для передачи параметров
                 $statement=$this->db->prepare("UPDATE ".$this->table." SET ".$target_col." WHERE ".$col); // Готовим запрос
                 $statement->execute($result); // Выполняем запрос
-            return $statement->rowCount();
+            return $statement->rowCount(); // Возвращаем количство затронутых строк
         }
 
     }
-   // Конец UPDATE
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Удаление DELETE
+    public function Delete(array $ColName,$OR_AND=null,$LIKE_RAVNO='LIKE')
+    {
+            $cols=array_keys($ColName); // Забрали имена ячеек
+            if($LIKE_RAVNO==='LIKE')// Если у нас похожие то перебираем массив ячеек и меняем в нем значения на %ЗНАЧЕНИЕ%
+            {
 
+                foreach ($ColName as $el) // Перебираем массив
+                {
+                    $temp_vals[]="%".$el."%"; // Записываем измененные значения в свой темповый массив
+                }
+                unset($ColName); // Уничтожаем страрый массив
+                for($i=0,$Imax=count($cols); $i <$Imax; $i++)
+                {
+                    $ColName[$cols[$i]]=$temp_vals[$i]; // Перезаписываем массив ячеек и значений
+                }
+                unset($temp_vals); // Удаляем темповый массив
+            }
+            $col=$cols[0]." ".$LIKE_RAVNO." :".$cols[0]; // Пишем первое выражение
+            for($i=1,$IMax=count($cols); $i < $IMax; $i++)
+            {
+                $col.=" ".$OR_AND." ".$cols[$i]." ".$LIKE_RAVNO." :".$cols[$i];
+            }
+            $statement=$this->db->prepare("DELETE FROM ".$this->table." WHERE ".$col);
+            $statement->execute($ColName);
+    }
 
 
 

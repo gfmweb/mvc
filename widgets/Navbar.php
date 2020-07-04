@@ -6,7 +6,7 @@ namespace widgets;
 
 class Navbar
 {
-    public static function LogoAlert($param='logo')
+    private static function LogoAlert($param='logo')
         /**
          * Принимает параметр того что нужно вернуть
          * по умолчанию вернет ЛОГО пользователя

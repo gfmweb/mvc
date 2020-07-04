@@ -15,7 +15,7 @@ class ContactsController
     public function index($params=null)
     {
         $db = new CRUD('test');
-        $db->Update( array('name'=>'Senior','lastname'=>'Developer'),null,'=',array('id'=>'1'));
+        $db->Delete( array('id'=>2),null,'=');
 
 
     }
