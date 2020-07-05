@@ -8,6 +8,7 @@ namespace controllers;
 
 use core\ValidateAccess;
 use models\UsersActions;
+use models\AdminActions;
 
 final class DverController
 {
@@ -108,5 +109,12 @@ final class DverController
     {
         $data=UsersActions::ChangeFormModal($params);  // Передаем параметры методу
         echo(json_encode($data)); // Отвечаем в json формате
+    }
+
+    public function Adminlogin($params=null)
+    {
+        if((ValidateAccess::ValidAccess($params))&& (AdminActions::checkPassword($params))){ // Если форма валидна
+            echo('Админ залогинен');
+        }
     }
 }

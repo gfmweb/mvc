@@ -17,3 +17,4 @@ define("DB_PASSWORD","root");     // Пароль
 
 
 define("APP_NAME","MVC");         // Имя приложения
+define('ADMIN_PASS','112233');
