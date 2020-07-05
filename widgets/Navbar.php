@@ -215,9 +215,10 @@ class Navbar
         }
         $search='<form class="form-inline mr-auto"  method="post">
                     <div class="md-form my-0">
+                         <i class="fa fa-search prefix text-white d-none"></i>
                         <input class="form-control mr-sm-2" type="text" name="query" placeholder="Поиск" aria-label="Search" value="'.$placeholder.'" onkeyup="filterquery()">
                         <input  type="hidden" value="'.$_SESSION['ValidateFormAccess'].'" id="ValidateFormAccessAjax" name="ValidateFormAccess" >
-                        <i class="fa fa-search prefix text-white"></i>
+                        
                     </div>
                 </form>
     
