@@ -114,7 +114,13 @@ final class DverController
     public function Adminlogin($params=null)
     {
         if((ValidateAccess::ValidAccess($params))&& (AdminActions::checkPassword($params))){ // Если форма валидна
-            echo('Админ залогинен');
+            $_SESSION['success']='Добро пожаловать Администратор';
+            $_SESSION['User']='Администратор';
+            $_SESSION['admin']=true;
         }
+        else{
+            $_SESSION['alert']='Неверный пароль';
+        }
+        header('Location: /Admin');
     }
 }

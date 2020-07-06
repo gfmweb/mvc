@@ -28,7 +28,7 @@ class ShowRoomModel extends Model
                 <div class="container mt-5 wow zoomIn">
                     <div class="row mt-5">'; // Начало контентной части
 
-            $containerIfno= new CRUD('materials');
+            $containerIfno= new CRUD('materials','WHERE ismoderate=\'1\'');
             $TotalPages=ceil($containerIfno->TotalRows/$maxcontent); // Делим количество строк на количество материалов на странице
 
 
@@ -41,7 +41,7 @@ class ShowRoomModel extends Model
                             {
                                 unset($_SESSION['search']); // Уничтожаем фильтр
                             }
-                            $containerIfno->GetInfo(null,null,null,null, $maxcontent,null); //Запрашиваем все данные из таблицы
+                            $containerIfno->GetInfo(null,null,null,null, $maxcontent,null,'  ismoderate = \'1\''); //Запрашиваем все данные из таблицы
                             $this->pagination= new Pagination(1,$TotalPages,'ShowRoom','page'); // Создаем пагинацию
                             foreach ($containerIfno->Resulting as $el){
                                 $this->content_result.=$el['content'];
@@ -54,7 +54,7 @@ class ShowRoomModel extends Model
                             $_SESSION['search'] = $params[0]['val'];
                             $this->SearchPlaysholder = $_SESSION['search'];
 
-                            $containerIfno->GetInfo(array('title','description','autor'),'OR','LIKE',$_SESSION['search'] ,$maxcontent,0);
+                            $containerIfno->GetInfo(array('title','description','autor'),'OR','LIKE',$_SESSION['search'] ,$maxcontent,0,' AND ismoderate = 1');
 
                             $TotalPages = intdiv($containerIfno->CurentRows, $maxcontent); // Делим количество строк на количество материалов на странице
                             if($containerIfno->CurentRows > 0){
@@ -95,10 +95,10 @@ class ShowRoomModel extends Model
                         }
                         else{
                             $offset=str_replace('page','',$req_method);
-                            if(($offset==='index')){$offset=1;}
+                            if(!is_numeric($offset)){$offset=1;}
                             $pagi_off=$offset;
                             $offset=($offset-1)*$maxcontent;
-                            $containerIfno->GetInfo(null,null,null, null,$maxcontent,$offset); //Запрашиваем все данные из таблицы
+                            $containerIfno->GetInfo(null,null,null, null,$maxcontent,0,'`ismoderate` = \'1\''); //Запрашиваем все данные из таблицы
                             if($containerIfno->CurentRows > 0){
                                 foreach ($containerIfno->Resulting as $el){
                                     $this->content_result.=$el['content'];

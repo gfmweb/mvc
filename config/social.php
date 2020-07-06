@@ -10,6 +10,7 @@ return array(
     'twitter'=>array('fab fa-twitter'=>''),
     'skype'=>array('fab fa-skype'=>''),
     'github'=>array('fab fa-github'=>''),
-    'telegram'=>array('fab fa-telegram'=>'')
+    'telegram'=>array('fab fa-telegram'=>''),
+    'tel'=>array('fas fa-phone	'=>'')
 
 );

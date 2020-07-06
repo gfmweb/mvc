@@ -81,7 +81,10 @@ class Navbar
                                        </li>
                         </ul>';
         }
-        else // Генерируется навбар для Залогиненного пользователя
+        elseif($logined==='admin'){
+            $right_nav='';
+        }
+        elseif($logined===true) // Генерируется навбар для Залогиненного пользователя
             {
                 $right_nav='<ul class="navbar-nav ml-auto nav-flex-icons">
       <li class="nav-item dropdown">
@@ -95,8 +98,10 @@ class Navbar
         </div>
       </li>
     </ul>';
+                if(!isset($_SESSION['admin'])){
                 $page_array['Мои работы']='/Index/myworks';
                 $page_array['Настройки']='/Index/lksettings';
+                }
         }
             $links='';
 

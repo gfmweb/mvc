@@ -37,7 +37,7 @@ include('template/header_str.php');
 </style>
 </head>
 <body>
-
+<?= $model->navbar ?>
 
 <div id="carousel-example-1z" class="carousel slide carousel-fade">
 
@@ -90,6 +90,10 @@ include('template/header_str.php');
 
     </div>
 
+
+        <?php
+        include('template/footer_str.php');
+        ?>
 
 
 

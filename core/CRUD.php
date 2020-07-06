@@ -20,11 +20,11 @@ final class CRUD
     public  $CurentRows;
     public  $Resulting;
 
-    public function __construct($table) // Принимает имя таблицы с которой будет работать модель
+    public function __construct($table,$add=null) // Принимает имя таблицы с которой будет работать модель
     {
         $this->db = Db::init(); // Инициализиркет подключение к БД
         $this->table=$table; // Записываем в свойство имя таблицы
-        $statement=$this->db->query("SELECT * FROM {$this->table}"); // Готовим запрос И узнаем сколько всего строк в таблице
+        $statement=$this->db->query("SELECT id FROM {$this->table} ".$add); // Готовим запрос И узнаем сколько всего строк в таблице
         $this->TotalRows=$statement->rowCount(); // Считаем строки
 
     }
@@ -42,7 +42,7 @@ final class CRUD
 
     // Чтение SELECT
 
-    public function GetInfo(array $ColName=null, $OR_AND=null, $LIKE_RAVNO=null,  $needle=null, $limit=null, $offset=0) // Метод получения данных из таблицы
+    public function GetInfo(array $ColName=null, $OR_AND=null, $LIKE_RAVNO=null,  $needle=null, $limit=null, $offset=0,$add=null) // Метод получения данных из таблицы
         /**
          * Массив ячеек таблицы в которых будет проводиться поиск если НЕТ то будет искать везде
          * Как будем искать И / ИЛИ (по умолчанию ИЛИ)
@@ -57,7 +57,7 @@ final class CRUD
 
         if((is_null($ColName))||(is_null($needle))) //  ЕСЛИ нет параметров поиска
         {
-             $statement=$this->db->prepare("SELECT * FROM {$this->table} WHERE 1 LIMIT :limit OFFSET :offset"); // Готовим запрос
+             $statement=$this->db->prepare("SELECT * FROM {$this->table} WHERE  ".$add." LIMIT :limit OFFSET :offset"); // Готовим запрос
              $statement->execute(array('limit'=>$limit,'offset'=>$offset)); // Выполняем запрос
              $this->CurentRows=$statement->rowCount(); // Посчитали строки
              $this->Resulting=$statement->fetchAll(); // Записываем результат в массив
@@ -70,7 +70,7 @@ final class CRUD
                 if($LIKE_RAVNO==='LIKE'){$needle="%".$needle."%";} // Преобразуем строку поиска для выражения LIKE
                 if(is_null($OR_AND)){$OR_AND=' OR ';} // Если не пришел параметр то будем искать ИЛИ
 
-                $req="SELECT * FROM `".$this->table."` WHERE ".$ColName[0]." ".$LIKE_RAVNO." :needle0"; // Начальная часть запроса
+                $req="SELECT * FROM `".$this->table."` WHERE ".$ColName[0]." ".$LIKE_RAVNO." :needle0 ".$add; // Начальная часть запроса
                 $req_params['needle0']=$needle; // Начало параметров
                 $iMax=count($ColName); // посчитали количество столбцов в которых будем искать
 
