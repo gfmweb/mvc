@@ -19,7 +19,7 @@ final class IndexController
 
     public function index($params=null) // ОСНОВНАЯ СТРАНИЦА
     {
-        if(!isset($_SESSION['User'])) { // Если пользователь не авторизированый
+        if((!isset($_SESSION['User']))||(isset($_SESSION['admin']))) { // Если пользователь не авторизированый
 
             $model = new IndexModel(); // Создание экземпляра класса
             $model->index(); // Заполнили модель данными по ЛОГИНУ

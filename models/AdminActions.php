@@ -48,6 +48,7 @@ class AdminActions
             $github_href='';
             $telegram_href='';
             $tel_href='';
+            $tel_hrefAdmin='';
             foreach($params as $el)
             {
                 if($el['param']==='DB_PASSWORD'){$pass=$el['val']; }
@@ -77,7 +78,7 @@ class AdminActions
                 if($el['param']=='skype_href'){$skype_href=$el['val'];}
                 if($el['param']=='github_href'){$github_href=$el['val'];}
                 if($el['param']=='telegram_href'){$telegram_href=$el['val'];}
-                if($el['param']=='tel_href'){$tel_href='tel: '.$el['val'];}
+                if($el['param']=='tel_href'){$tel_href='tel:'.$el['val'];$tel_hrefAdmin=$el['val'];}
             }
             $string="<?php 
 /**
@@ -111,7 +112,7 @@ return array(
  '.$twitter_pref.'\'twitter\'=>array(\'fab fa-twitter\'=>\''.$twitter_href.'\'),
  '.$skype_pref.'\'skype\'=>array(\'fab fa-skype\'=>\''.$skype_href.'\'),
  '.$github_pref.'\'github\'=>array(\'fab fa-github\'=>\''.$github_href.'\'),
- '.$tel_pref.'\'telegram\'=>array(\'fab fa-telegram\'=>\''.$telegram_href.'\'),
+ '.$telegram_pref.'\'telegram\'=>array(\'fab fa-telegram\'=>\''.$telegram_href.'\'),
  '.$tel_pref.'\'tel\'=>array(\'fas fa-phone	\'=>\''.$tel_href.'\')
 
 );';
@@ -128,7 +129,7 @@ return array(
 \'skype\'=>array(\'fab fa-skype\'=>\''.$skype_href.'\'),
 \'github\'=>array(\'fab fa-github\'=>\''.$github_href.'\'),
 \'telegram\'=>array(\'fab fa-telegram\'=>\''.$telegram_href.'\'),
-\'tel\'=>array(\'fas fa-phone	\'=>\''.$tel_href.'\')
+\'tel\'=>array(\'fas fa-phone	\'=>\''.$tel_hrefAdmin.'\')
 
 );';
     $file=fopen('config/socialadmin.php','w');
