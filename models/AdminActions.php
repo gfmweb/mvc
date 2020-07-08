@@ -35,6 +35,19 @@ class AdminActions
             $github_pref='//';
             $telegram_pref='//';
             $tel_pref='//';
+
+            $vk_href='';
+            $whatsapp_href='';
+            $youtube_href='';
+            $facebook_href='';
+            $ok_href='';
+            $instagram_href='';
+            $viber_href='';
+            $twitter_href='';
+            $skype_href='';
+            $github_href='';
+            $telegram_href='';
+            $tel_href='';
             foreach($params as $el)
             {
                 if($el['param']==='DB_PASSWORD'){$pass=$el['val']; }
@@ -52,6 +65,19 @@ class AdminActions
                 if($el['param']=='github'){$github_pref='';}
                 if($el['param']=='telegram'){$telegram_pref='';}
                 if($el['param']=='tel'){$tel_pref='';}
+
+                if($el['param']=='vk_href'){$vk_href=$el['val'];}
+                if($el['param']=='whatsapp_href'){$whatsapp_href=$el['val']; }
+                if($el['param']=='youtube_href'){$youtube_href=$el['val'];}
+                if($el['param']=='facebook_href'){$facebook_href=$el['val'];}
+                if($el['param']=='ok_href'){$ok_href=$el['val'];}
+                if($el['param']=='instagram_href'){$instagram_href=$el['val'];}
+                if($el['param']=='viber_href'){$viber_href=$el['val'];}
+                if($el['param']=='twitter_href'){$twitter_href=$el['val'];}
+                if($el['param']=='skype_href'){$skype_href=$el['val'];}
+                if($el['param']=='github_href'){$github_href=$el['val'];}
+                if($el['param']=='telegram_href'){$telegram_href=$el['val'];}
+                if($el['param']=='tel_href'){$tel_href='tel: '.$el['val'];}
             }
             $string="<?php 
 /**
@@ -101,7 +127,7 @@ define(\"ADMIN_PASS\",\"".$adm_pass."\");    // Пароль администр�
                                             ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;");
             $statement->execute();
 
-            echo'<pre>'; print_r($params); echo'</pre>';
+
 
            $_SESSION['success']='Изменения успешно внесены<br/>config.php - сформирован<br/>База данных инициализирована<br/> Социальные кнопки актуализированы';
             return true;
