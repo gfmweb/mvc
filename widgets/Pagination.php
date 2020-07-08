@@ -12,7 +12,8 @@ class Pagination
     private $pagi_end;
     public function __construct($Position=null,$Pages=0,$Controller=null,$PageName=null)
     {
-        if($Pages>0)
+
+        if($Pages>1)
         { // Если вообще есть необходимость в пагинации
 
         // Начало пагинации
@@ -51,7 +52,12 @@ class Pagination
             {
                 $Curent_Pos=intdiv($Position,10);
                 $start=10*$Curent_Pos;
+
                 $finish=$start+10;
+                if($finish>$Pages)
+                {
+                    $finish=$Pages;
+                }
 
             }
             if($Position==10)
@@ -60,18 +66,26 @@ class Pagination
                 $Curent_Pos=10;
                 $start=10;
                 $finish=20;
+                if($finish>$Pages)
+                {
+                    $finish=$Pages;
+                }
 
             }
             elseif($Position<10){
                 $start=2;
                 $finish=10;
+                if($finish>$Pages)
+                {
+                    $finish=$Pages;
+                }
             }
 
             $Tail=ceil($Pages /10);
 
             for($i=$start; $i<=$finish; $i++)
             {
-                if($i===$Position)
+                if($i==$Position)
                 {
                     $this->pagi_body.='<li class="page-item active">
                                                <a class="page-link">'.$i.' <span class="sr-only">(current)</span></a>
@@ -93,7 +107,7 @@ class Pagination
                                               <li class="page-item"><a href="/'.$Controller.'/'.$PageName.''.$startI.'" class="page-link"><small style="white-space: nowrap"><strong>'.$startI.'-'.$stopI.'</strong></small></a></li>
                                           </li>';
             }
-            if($Position!==$Pages)
+            if($Position<$Pages)
             {
                 $NextPage=$Position+1;
                 $this->pagi_end=' <li class="page-item ">
@@ -135,11 +149,11 @@ class Pagination
                                           </li>';
                 }
             }
-            if($Position!==$Pages)
+            if($Position<=$Pages)
             {
 
                 $NextPage=$Position+1;
-                if($NextPage<=$Pages){
+                if($NextPage<$Pages){
                 $this->pagi_end=' <li class="page-item ">
                                                     <a href="/'.$Controller.'/'.$PageName.''.$NextPage.'" class="page-link">Далее</a>
                                                 </li>
