@@ -6,7 +6,7 @@ foreach ($icons as $elem)
     foreach ($elem as $key=>$val)
     {
         $social.="<a href=\"".$val."\" target=\"_blank\">
-            <i class=\"".$key." mr-3\"></i>
+            <i class=\"".$key." mr-3 fa-2x\"></i>
         </a>";
     }
 }

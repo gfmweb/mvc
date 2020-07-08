@@ -33,7 +33,7 @@ class Pagination
                                               <li class="page-item"><a href="/'.$Controller.'/'. $PageName .''.$backIndicator.'" class="page-link">Назад</a></li>
                                            </li> ';}
                 else{$back=null;}
-                if($Position<=10){$first='<li class="page-item ">
+                if($Position<10){$first='<li class="page-item ">
                                               <li class="page-item"><a href="/'.$Controller.'/'.$PageName.'1" class="page-link">1</a></li>
                                           </li>';}
                 else{$first=null;}
@@ -54,7 +54,15 @@ class Pagination
                 $finish=$start+10;
 
             }
-            else{
+            if($Position==10)
+            {
+
+                $Curent_Pos=10;
+                $start=10;
+                $finish=20;
+
+            }
+            elseif($Position<10){
                 $start=2;
                 $finish=10;
             }

@@ -28,7 +28,7 @@ class ShowRoomModel extends Model
                 <div class="container mt-5 wow zoomIn">
                     <div class="row mt-5">'; // Начало контентной части
 
-            $containerIfno= new CRUD('materials','WHERE ismoderate=\'1\'');
+            $containerIfno= new CRUD('materials',null);
             $TotalPages=ceil($containerIfno->TotalRows/$maxcontent); // Делим количество строк на количество материалов на странице
 
 
@@ -41,7 +41,7 @@ class ShowRoomModel extends Model
                             {
                                 unset($_SESSION['search']); // Уничтожаем фильтр
                             }
-                            $containerIfno->GetInfo(null,null,null,null, $maxcontent,null,'  ismoderate = \'1\''); //Запрашиваем все данные из таблицы
+                            $containerIfno->GetInfo(null,null,null,null, $maxcontent,null,null); //Запрашиваем все данные из таблицы
                             $this->pagination= new Pagination(1,$TotalPages,'ShowRoom','page'); // Создаем пагинацию
                             foreach ($containerIfno->Resulting as $el){
                                 $this->content_result.=$el['content'];
@@ -56,7 +56,8 @@ class ShowRoomModel extends Model
 
                             $containerIfno->GetInfo(array('title','description','autor'),'OR','LIKE',$_SESSION['search'] ,$maxcontent,0,' AND ismoderate = 1');
 
-                            $TotalPages = intdiv($containerIfno->CurentRows, $maxcontent); // Делим количество строк на количество материалов на странице
+                            $TotalPages = intdiv($containerIfno->TotalRows, $maxcontent); // Делим количество строк на количество материалов на странице
+
                             if($containerIfno->CurentRows > 0){
                                 foreach ($containerIfno->Resulting as $el){
                                     $this->content_result.=$el['content'];
@@ -80,7 +81,7 @@ class ShowRoomModel extends Model
                             $this->SearchPlaysholder = $_SESSION['search']; // Записываем состояние строки поиска в строку
                             $offset=($offset-1)*$maxcontent; // Считаем сдвиг
                             $containerIfno->GetInfo(array('title','description','autor'),'OR','LIKE',$this->SearchPlaysholder,$maxcontent,$offset);
-                            $RowsCountAjax = $containerIfno->CurentRows; // Количество строк при поиске составило
+                            $RowsCountAjax = $containerIfno->TotalRows; // Количество строк при поиске составило
                             $TotalPages = intdiv($RowsCountAjax, $maxcontent); // Делим количество строк на количество материалов на странице
                             if($containerIfno->CurentRows > 0){ // Если есть что показывать то в цикле формируем контент
                                 foreach ($containerIfno->Resulting as $el){ // Формирование контента
@@ -98,7 +99,7 @@ class ShowRoomModel extends Model
                             if(!is_numeric($offset)){$offset=1;}
                             $pagi_off=$offset;
                             $offset=($offset-1)*$maxcontent;
-                            $containerIfno->GetInfo(null,null,null, null,$maxcontent,0,'`ismoderate` = \'1\''); //Запрашиваем все данные из таблицы
+                            $containerIfno->GetInfo(null,null,null, null,$maxcontent,$offset,null); //Запрашиваем все данные из таблицы
                             if($containerIfno->CurentRows > 0){
                                 foreach ($containerIfno->Resulting as $el){
                                     $this->content_result.=$el['content'];

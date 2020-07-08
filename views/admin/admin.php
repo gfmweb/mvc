@@ -52,11 +52,11 @@
                             <tbody class=" table-active table-responsive-lg">
                             <?php
                                 $social_content=null;
-                                $social_links=require 'config/social.php';
+                                $social_links=require 'config/socialadmin.php';
                                 foreach ($social_links as $name=>$el)
                                 {
                                     foreach ($el as $icon=>$href){
-                                        if(!$href==='') {
+                                        if($href!=='') {
                                             $social_content .= " <tr><td><input type=\"checkbox\" name=\"{$name}\" checked onchange= \"editsocial('$name')\"> <i class=\"{$icon}\"></i></td> <td><input id=\"{$name}\" type=\"text\" name=\"{$name}_href\" value='{$href}' placeholder='{$name}'>  </td></tr>";
                                         }
                                         else{

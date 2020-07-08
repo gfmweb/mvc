@@ -99,6 +99,44 @@ define(\"ADMIN_PASS\",\"".$adm_pass."\");    // Пароль администр�
             $file=fopen('config/config.php','w');
             fwrite($file,$string);
             fclose($file);
+$SocialString='<?php
+return array(
+ '.$vk_pref.'\'vk\'=>array(\'fab fa-vk\'=>\''.$vk_href.'\'),
+ '.$whatsapp_pref.'\'whatsapp\'=>array(\'fab fa-whatsapp\'=>\''.$whatsapp_href.'\'),
+ '.$youtube_pref.'\'youtube\'=>array(\'fab fa-youtube\'=>\''.$youtube_href.'\'),
+ '.$facebook_pref.'\'facebook\'=>array(\'fab fa-facebook\'=>\''.$facebook_href.'\'),
+ '.$ok_pref.'\'ok\'=>array(\'fab fa-odnoklassniki\'=>\''.$ok_href.'\'),
+ '.$instagram_pref.'\'instagram\'=>array(\'fab fa-instagram\'=>\''.$instagram_href.'\'),
+ '.$viber_pref.'\'viber\'=>array(\'fab fa-viber\'=>\''.$viber_href.'\'),
+ '.$twitter_pref.'\'twitter\'=>array(\'fab fa-twitter\'=>\''.$twitter_href.'\'),
+ '.$skype_pref.'\'skype\'=>array(\'fab fa-skype\'=>\''.$skype_href.'\'),
+ '.$github_pref.'\'github\'=>array(\'fab fa-github\'=>\''.$github_href.'\'),
+ '.$tel_pref.'\'telegram\'=>array(\'fab fa-telegram\'=>\''.$telegram_href.'\'),
+ '.$tel_pref.'\'tel\'=>array(\'fas fa-phone	\'=>\''.$tel_href.'\')
+
+);';
+$SocialStringAdmin='<?php
+return array(
+\'vk\'=>array(\'fab fa-vk\'=>\''.$vk_href.'\'),
+\'whatsapp\'=>array(\'fab fa-whatsapp\'=>\''.$whatsapp_href.'\'),
+\'youtube\'=>array(\'fab fa-youtube\'=>\''.$youtube_href.'\'),
+\'facebook\'=>array(\'fab fa-facebook\'=>\''.$facebook_href.'\'),
+\'ok\'=>array(\'fab fa-odnoklassniki\'=>\''.$ok_href.'\'),
+\'instagram\'=>array(\'fab fa-instagram\'=>\''.$instagram_href.'\'),
+\'viber\'=>array(\'fab fa-viber\'=>\''.$viber_href.'\'),
+\'twitter\'=>array(\'fab fa-twitter\'=>\''.$twitter_href.'\'),
+\'skype\'=>array(\'fab fa-skype\'=>\''.$skype_href.'\'),
+\'github\'=>array(\'fab fa-github\'=>\''.$github_href.'\'),
+\'telegram\'=>array(\'fab fa-telegram\'=>\''.$telegram_href.'\'),
+\'tel\'=>array(\'fas fa-phone	\'=>\''.$tel_href.'\')
+
+);';
+    $file=fopen('config/socialadmin.php','w');
+    fwrite($file,$SocialStringAdmin);
+    fclose($file);
+    $file=fopen('config/social.php','w');
+    fwrite($file,$SocialString);
+    fclose($file);
 
             $db=Db::init();
             $statement=$db->prepare('CREATE DATABASE IF NOT EXISTS '.$params[2]['val']);
